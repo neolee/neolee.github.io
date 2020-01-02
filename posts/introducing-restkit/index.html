@@ -1,0 +1,572 @@
+<!doctype html>
+
+<html lang="en-us">
+
+<head>
+  <title>Introducing RestKit | Paradigm X</title>
+  <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="The HTML5 Herald" />
+<meta name="author" content="Neo Lee" /><meta property="og:title" content="Introducing RestKit" />
+<meta property="og:description" content="RestKit is an amazing Objective-C framework for iOS that aims to make interacting with RESTful web services simple, fast and fun. As said on its homepage:
+
+It combines a clean, simple HTTP request/response API with a powerful object mapping system that reduces the amount of code you need to write to get stuff done.
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/posts/introducing-restkit/" />
+<meta property="article:published_time" content="2012-01-31T18:59:00+08:00" />
+<meta property="article:modified_time" content="2012-01-31T18:59:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Introducing RestKit"/>
+<meta name="twitter:description" content="RestKit is an amazing Objective-C framework for iOS that aims to make interacting with RESTful web services simple, fast and fun. As said on its homepage:
+
+It combines a clean, simple HTTP request/response API with a powerful object mapping system that reduces the amount of code you need to write to get stuff done.
+"/>
+
+<meta name="generator" content="Hugo 0.62.1" />
+    
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha256-l85OmPOjvil/SOvVt3HnSSjzF1TUMyT9eV0c2BzEGzU=" crossorigin="anonymous" />
+  <link rel="stylesheet" href="/fontawesome/css/all.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab|Ruda" />
+  <link rel="stylesheet" type="text/css" href="/css/styles.css" /><link rel='stylesheet' href='/css/main.css'></head>
+
+<body>
+  <div id="container">
+    <header>
+      <h1>
+                <a href="/">Paradigm X</a>
+            </h1>
+
+      <ul id="social-media">
+             <li>
+               <a href="https://github.com/neolee" title="GitHub">
+               <i class="fab fa-github fa-lg"></i>
+               </a>
+             </li>
+             <li>
+               <a href="https://twitter.com/soulhacker" title="Twitter">
+               <i class="fab fa-twitter fa-lg"></i>
+               </a>
+             </li>
+      </ul>
+      
+      <p><em>Vision quests of a soulhacker</em></p>
+      
+    </header>
+
+    
+<nav>
+    <ul>
+        
+        <li>
+            <a class="" href="/tags">
+                <i class="fa-li fa  fa-lg"></i><span>Tags</span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="" href="/posts/">
+                <i class="fa-li fa  fa-lg"></i><span>All Posts</span>
+            </a>
+        </li>
+        
+    </ul>
+</nav>
+
+    <main>
+
+
+
+
+<article>
+
+    <h1>Introducing RestKit</h1>
+
+    
+    <aside>
+    <ul>
+        <li>
+            <time class="post-date" datetime="2012-01-31T18:59:00&#43;08:00">Jan 31, 2012</time>
+        </li>
+        
+
+        
+        <li>
+            <em>
+                
+                    
+                    <a href="/tags/architecture">#Architecture</a>
+                
+            </em>
+        </li>
+        
+
+        <li>13 minutes read</li>
+    </ul>
+</aside>
+
+    
+
+    
+
+    <p><a href="http://restkit.org/">RestKit</a> is an amazing <strong>Objective-C framework for iOS</strong> that aims to make interacting with RESTful web services simple, fast and fun. As said on its homepage:</p>
+<blockquote>
+<p>It combines a clean, simple HTTP request/response API with a powerful object mapping system that reduces the amount of code you need to write to get stuff done.</p>
+</blockquote>
+<p>RestKit provides several components:</p>
+<ol>
+<li><strong>An HTTP client component</strong> based on <code>NSURLConnection</code>. It's not as feature-packed as ASIHTTPRequest<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>, but it does its part very well in most cases. It supports <code>GET</code> <code>POST</code> <code>PUT</code> <code>DELETE</code>, <code>SSL</code> &amp; <code>HTTP AUTH</code>, multi-part, etc. It even provides a request queue to manage the HTTP requests(mostly implicitly), making them more memory and bandwidth efficient.</li>
+<li><strong>A powerful but elegant object mapping system</strong>, which uses idiomatic key-value coding mechanism to define and implement the round-trip transformation between <code>JSON</code><sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup> string and native Objective-C class. Well, the magic behind it is called <a href="https://github.com/jverkoey/sockit">SOCKit</a><sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup>.</li>
+<li><strong>A persistent layer</strong> built on top of the object mapping system, fully integrated with CoreData. Can be used as app's primary data storage or just local cache.</li>
+<li><strong>Miscellaneous helpers</strong> for better life. Reachability, database seeding, API environments switching, etc.</li>
+</ol>
+<p>Other than making another almighty monster its creators focus on the remote-local object (can be transient or persistent through CoreData) mapping. They made it through the &lsquo;<em>common things simple, others possible</em>&rsquo; philosophy, which I always love.</p>
+<p>RestKit has some <a href="https://github.com/RestKit/RestKit/wiki">documentations</a> but not very well organized. Maybe it's the biggest problem for beginners. So I'd like to list below some most useful solution recipes I've used in real world project, updated progressively.</p>
+<p><strong><em><strong>WARNING</strong></em></strong>: it will be incredibly long anyway.</p>
+<h2 id="setting-up">Setting up</h2>
+<p>RestKit provides two ways to set up the RestKit client: <code>RKClient</code> and <code>RKObjectManager</code>. If you want to manually handle the return data you should use <code>RKClient</code>. Otherwise, if you want to use the RestKit object mapping system, then <code>RKObjectManager</code> is the one.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-objc" data-lang="objc"><span style="color:#75715e">// API base (and the whole API environment) can be switched by
+</span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">define gkBaseURL @&#34;https:</span><span style="color:#75715e">//api.domain.com/v2&#34;
+</span><span style="color:#75715e"></span>
+RKObjectManager<span style="color:#f92672">*</span> manager <span style="color:#f92672">=</span> [RKObjectManager objectManagerWithBaseURL:gkBaseURL];
+NSLog(<span style="color:#e6db74">@&#34;</span><span style="color:#e6db74">I am your RKObjectManager singleton : %@</span><span style="color:#e6db74">&#34;</span>, manager);
+
+<span style="color:#75715e">// Or you can use
+</span><span style="color:#75715e"></span>RKClient <span style="color:#f92672">*</span>client <span style="color:#f92672">=</span> [RKClient clientWithBaseURL:gkBaseURL];
+NSLog(<span style="color:#e6db74">@&#34;</span><span style="color:#e6db74">I am your RKClient singleton : %@</span><span style="color:#e6db74">&#34;</span>, client);
+</code></pre></div><p>RestKit uses a convenient convention: the first initialized client object becomes a singleton and can be referenced by <code>[RKClient sharedClient]</code> or <code>[RKObjectManager sharedManager]</code> correspondingly.</p>
+<p>In real world we usually have more than one base URLs, say, one for product environment, the second for testing and third for developing. The base URL can be easily changed globally:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-objc" data-lang="objc">[[RKClient sharedClient] setBaseURL:<span style="color:#e6db74">@&#34;</span><span style="color:#e6db74">https://api.domain.com/v2d</span><span style="color:#e6db74">&#34;</span>];
+</code></pre></div><p>Note that change base URL while app is running may bring some side effects. See <a href="http://restkit.org/api/0.9/Classes/RKClient.html#//api/name/baseURL">the API document</a> for detail.</p>
+<p><code>RKClient</code> acts just like a plain asynchronous HTTP client. You can send any HTTP request through its intuitive interface:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-objc" data-lang="objc"><span style="color:#66d9ef">@interface</span> <span style="color:#a6e22e">User</span> : <span style="color:#a6e22e">NSObject</span> <span style="color:#f92672">&lt;</span>RKRequestDelegate<span style="color:#f92672">&gt;</span> {
+}
+
+<span style="color:#66d9ef">@implementation</span> <span style="color:#a6e22e">User</span>
+
+- (<span style="color:#66d9ef">void</span>)<span style="color:#a6e22e">send</span> {
+    <span style="color:#75715e">// HTTP GET
+</span><span style="color:#75715e"></span>    [ [RKClient sharedClient] get:<span style="color:#e6db74">@&#34;</span><span style="color:#e6db74">users/self</span><span style="color:#e6db74">&#34;</span> delegate:self];
+
+    <span style="color:#75715e">// HTTP POST. Note the transparent NSDictionary conversion
+</span><span style="color:#75715e"></span>    NSDictionary<span style="color:#f92672">*</span> params <span style="color:#f92672">=</span> 
+        [NSDictionary dictionaryWithObjectsAndKeys:_userName, <span style="color:#e6db74">@&#34;</span><span style="color:#e6db74">userName</span><span style="color:#e6db74">&#34;</span>, 
+                                                   _password, <span style="color:#e6db74">@&#34;</span><span style="color:#e6db74">password</span><span style="color:#e6db74">&#34;</span>, nil];
+    [ [RKClient sharedClient] post:<span style="color:#e6db74">@&#34;</span><span style="color:#e6db74">users/login</span><span style="color:#e6db74">&#34;</span> params:params delegate:self];
+
+    <span style="color:#75715e">// HTTP DELETE
+</span><span style="color:#75715e"></span>    [ [RKClient sharedClient] delete:<span style="color:#e6db74">@&#34;</span><span style="color:#e6db74">users/13</span><span style="color:#e6db74">&#34;</span> delegate:self];
+}
+
+<span style="color:#75715e">// The delegate handles the response data when its fully loaded
+</span><span style="color:#75715e"></span>- (<span style="color:#66d9ef">void</span>)<span style="color:#a6e22e">request:</span>(RKRequest<span style="color:#f92672">*</span>)request <span style="color:#a6e22e">didLoadResponse:</span>(RKResponse<span style="color:#f92672">*</span>)response {  
+    <span style="color:#66d9ef">if</span> ([request isGET]) {
+        <span style="color:#66d9ef">if</span> ([response isOK]) {
+            NSLog(<span style="color:#e6db74">@&#34;</span><span style="color:#e6db74">Data returned: %@</span><span style="color:#e6db74">&#34;</span>, [response bodyAsString]);
+        }
+    } <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> ([request isPOST]) {
+        <span style="color:#66d9ef">if</span> ([response isJSON]) {
+            NSLog(<span style="color:#e6db74">@&#34;</span><span style="color:#e6db74">POST returned a JSON response</span><span style="color:#e6db74">&#34;</span>);
+        }
+    } <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> ([request isDELETE]) {
+        <span style="color:#66d9ef">if</span> ([response isNotFound]) {
+            NSLog(<span style="color:#e6db74">@&#34;</span><span style="color:#e6db74">Resource &#39;%@&#39; not exists</span><span style="color:#e6db74">&#34;</span>, [request resourcePath]);
+        }
+    }
+}
+</code></pre></div><p>By using <code>RKObjectManager</code> you'll map the web resources to local Objective-C objects, so you need not (and cannot) handle the return data explicitly. Instead you should handle data through the mapping system, which will be discussed below.</p>
+<h2 id="modeling-and-mapping">Modeling and Mapping</h2>
+<p>Now the object mapping system. Let's start with the best practice in RESTful API backed mobile app development:</p>
+<blockquote>
+<ol>
+<li>Analyze the business and make abstraction.</li>
+<li>Design the RESTful API spec based on the first step, including all call endpoints, parameters and returning data in JSON format.</li>
+<li>Mapping the API spec to native code in designated mobile platform.</li>
+</ol>
+</blockquote>
+<p>Assuming we have a simple API named <code>users/login</code>, accepting POST request with 2 parameters: <code>username</code> and <code>password</code>, doing login check, and returning a encrypted access <code>token</code> and corresponding <code>user</code> object. And as a global convention we encapsulate the payload as <code>response</code> section in a JSON string which also contains a <code>meta</code> section for system level info such as status code and error message. So here it looks like:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript">{
+    <span style="color:#e6db74">&#34;meta&#34;</span><span style="color:#f92672">:</span> {
+        <span style="color:#e6db74">&#34;code&#34;</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">200</span>
+    },
+    <span style="color:#e6db74">&#34;response&#34;</span><span style="color:#f92672">:</span> {
+        <span style="color:#e6db74">&#34;token&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;931240153764834717 156605143238420655&#34;</span>,
+        <span style="color:#e6db74">&#34;user&#34;</span><span style="color:#f92672">:</span> {
+            <span style="color:#e6db74">&#34;user_name&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;soulhacker&#34;</span>,
+            <span style="color:#e6db74">&#34;...&#34;</span>
+        }
+    }
+}
+</code></pre></div><p>It's simple but not trivial, and very <em>representative</em>. What will the mapping work? Have a look at the code first:</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">56
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">57
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">58
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">59
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">60
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">61
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">62
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">63
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">64
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">65
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">66
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">67
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">68
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">69
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">70
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">71
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">72
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">73
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">74
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">75
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">76
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">77
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">78
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">79
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">80
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-objc" data-lang="objc"><span style="color:#75715e">#</span><span style="color:#75715e">pragma Mark - Class Meta</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">@interface</span> <span style="color:#a6e22e">Meta</span> : <span style="color:#a6e22e">NSObject</span>
+<span style="color:#66d9ef">@property</span> (<span style="color:#66d9ef">readonly</span>) NSString <span style="color:#f92672">*</span>code;
+<span style="color:#66d9ef">@end</span>
+
+<span style="color:#66d9ef">@implementation</span> <span style="color:#a6e22e">Meta</span>
+<span style="color:#66d9ef">@synthesize</span> code <span style="color:#f92672">=</span> _code;
+<span style="color:#66d9ef">@end</span>
+
+<span style="color:#75715e">#</span><span style="color:#75715e">pragma Mark - Class User</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">@interface</span> <span style="color:#a6e22e">User</span> : <span style="color:#a6e22e">NSObject</span>
+<span style="color:#66d9ef">@property</span> (<span style="color:#66d9ef">readonly</span>) NSString <span style="color:#f92672">*</span>userName;
+<span style="color:#75715e">// Many stuff omitted here
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">@end</span>
+
+<span style="color:#66d9ef">@implementation</span> <span style="color:#a6e22e">User</span>
+<span style="color:#66d9ef">@synthesize</span> userName <span style="color:#f92672">=</span> _userName;
+<span style="color:#75715e">// Many stuff omitted here
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">@end</span>
+
+<span style="color:#75715e">#</span><span style="color:#75715e">pragma Mark - Class UsersLogin</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">@interface</span> <span style="color:#a6e22e">UsersLogin</span> : <span style="color:#a6e22e">NSObject</span>
+<span style="color:#66d9ef">@property</span> (<span style="color:#66d9ef">readonly</span>) Meta <span style="color:#f92672">*</span>meta;
+<span style="color:#66d9ef">@property</span> (<span style="color:#66d9ef">readonly</span>) NSString <span style="color:#f92672">*</span>token;
+<span style="color:#66d9ef">@property</span> (<span style="color:#66d9ef">readonly</span>) User <span style="color:#f92672">*</span>user;
+<span style="color:#66d9ef">@end</span>
+
+<span style="color:#66d9ef">@implementation</span> <span style="color:#a6e22e">UsersLogin</span>
+<span style="color:#66d9ef">@synthesize</span> meta <span style="color:#f92672">=</span> _meta;
+<span style="color:#66d9ef">@synthesize</span> token <span style="color:#f92672">=</span> _token;
+<span style="color:#66d9ef">@synthesize</span> user <span style="color:#f92672">=</span> _user;
+<span style="color:#66d9ef">@end</span>
+
+<span style="color:#75715e">#</span><span style="color:#75715e">pragma Mark - Class UsersLoginRequest</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">@interface</span> <span style="color:#a6e22e">UsersLoginRequest</span> : <span style="color:#a6e22e">NSObject</span> <span style="color:#f92672">&lt;</span>RKObjectLoaderDelegate<span style="color:#f92672">&gt;</span> 
+<span style="color:#66d9ef">@property</span> (<span style="color:#66d9ef">nonatomic</span>, <span style="color:#66d9ef">retain</span>) NSString <span style="color:#f92672">*</span>userName;
+<span style="color:#66d9ef">@property</span> (<span style="color:#66d9ef">nonatomic</span>, <span style="color:#66d9ef">retain</span>) NSString <span style="color:#f92672">*</span>password;
+
+- (UsersLoginRequest <span style="color:#f92672">*</span>)<span style="color:#a6e22e">initWithUserName:</span>(NSString <span style="color:#f92672">*</span>)userName <span style="color:#a6e22e">password:</span>(NSString <span style="color:#f92672">*</span>)password;
+- (<span style="color:#66d9ef">void</span>)<span style="color:#a6e22e">login</span>;
+<span style="color:#66d9ef">@end</span>
+
+<span style="color:#66d9ef">@implementation</span> <span style="color:#a6e22e">UsersLoginRequest</span>
+<span style="color:#75715e">// Even more stuff omitted here
+</span><span style="color:#75715e"></span>
+- (<span style="color:#66d9ef">void</span>)<span style="color:#a6e22e">login</span> {
+    RKObjectMapping <span style="color:#f92672">*</span>metaMapping <span style="color:#f92672">=</span> [RKObjectMapping mappingForClass:[Meta <span style="color:#66d9ef">class</span>]];
+    [metaMapping mapAttributes:<span style="color:#e6db74">@&#34;</span><span style="color:#e6db74">code</span><span style="color:#e6db74">&#34;</span>, nil];
+
+    RKObjectMapping <span style="color:#f92672">*</span>userMapping <span style="color:#f92672">=</span> [RKObjectMapping mappingForClass:[User <span style="color:#66d9ef">class</span>]];
+    [userMapping mapKeyPath:<span style="color:#e6db74">@&#34;</span><span style="color:#e6db74">user_name</span><span style="color:#e6db74">&#34;</span> toAttribute:<span style="color:#e6db74">@&#34;</span><span style="color:#e6db74">userName</span><span style="color:#e6db74">&#34;</span>];
+    <span style="color:#75715e">// More mapping for userMapping
+</span><span style="color:#75715e"></span>
+    RKObjectMapping <span style="color:#f92672">*</span>mapping <span style="color:#f92672">=</span> [RKObjectMapping mappingForClass:[UsersLogin <span style="color:#66d9ef">class</span>]];
+    [mapping mapKeyPath:<span style="color:#e6db74">@&#34;</span><span style="color:#e6db74">response.token</span><span style="color:#e6db74">&#34;</span> toAttribute:<span style="color:#e6db74">@&#34;</span><span style="color:#e6db74">token</span><span style="color:#e6db74">&#34;</span>];
+    [mapping mapKeyPath:<span style="color:#e6db74">@&#34;</span><span style="color:#e6db74">meta</span><span style="color:#e6db74">&#34;</span> toRelationship:<span style="color:#e6db74">@&#34;</span><span style="color:#e6db74">meta</span><span style="color:#e6db74">&#34;</span> withMapping:metaMapping];
+    [mapping mapKeyPath:<span style="color:#e6db74">@&#34;</span><span style="color:#e6db74">user</span><span style="color:#e6db74">&#34;</span> toRelationship:<span style="color:#e6db74">@&#34;</span><span style="color:#e6db74">user</span><span style="color:#e6db74">&#34;</span> withMapping:userMapping];
+    
+    <span style="color:#75715e">// Make the call
+</span><span style="color:#75715e"></span>    NSDictionary<span style="color:#f92672">*</span> params <span style="color:#f92672">=</span> [NSDictionary dictionaryWithObjectsAndKeys:_userName, <span style="color:#e6db74">@&#34;</span><span style="color:#e6db74">userName</span><span style="color:#e6db74">&#34;</span>, _password, <span style="color:#e6db74">@&#34;</span><span style="color:#e6db74">password</span><span style="color:#e6db74">&#34;</span>, nil];
+    NSString <span style="color:#f92672">*</span>endpoint <span style="color:#f92672">=</span> <span style="color:#e6db74">@&#34;</span><span style="color:#e6db74">users/login?</span><span style="color:#e6db74">&#34;</span>;
+    NSString <span style="color:#f92672">*</span>resourcePath <span style="color:#f92672">=</span> [endpoint stringByAppendingString:[params queryString]];
+    [[RKObjectManager sharedManager] loadObjectsAtResourcePath:resourcePath objectMapping:mapping delegate:self];
+}
+
+<span style="color:#75715e">#</span><span style="color:#75715e">pragma Mark - RKObjectLoaderDelegate</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span>
+- (<span style="color:#66d9ef">void</span>)<span style="color:#a6e22e">objectLoader:</span>(RKObjectLoader <span style="color:#f92672">*</span>)objectLoader <span style="color:#a6e22e">didLoadObjects:</span>(NSArray <span style="color:#f92672">*</span>)objects {
+    UsersLogin <span style="color:#f92672">*</span>result <span style="color:#f92672">=</span> [objects objectAtIndex:<span style="color:#ae81ff">0</span>];
+    
+    NSLog(<span style="color:#e6db74">@&#34;</span><span style="color:#e6db74">Response code=%@, token=[%@], userName=[%@]</span><span style="color:#e6db74">&#34;</span>, [[result meta] code], [result token], [[result user] userName]);
+}
+
+- (<span style="color:#66d9ef">void</span>)<span style="color:#a6e22e">objectLoader:</span>(RKObjectLoader <span style="color:#f92672">*</span>)objectLoader <span style="color:#a6e22e">didFailWithError:</span>(NSError <span style="color:#f92672">*</span>)error {
+    NSLog(<span style="color:#e6db74">@&#34;</span><span style="color:#e6db74">Error!</span><span style="color:#e6db74">&#34;</span>);
+}
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>Line 1-35</strong>. Firstly we defined all needed model classes: fundamental ones first, ones that contain them next. Just follow the nature of the data structure within the API's response data.<br>
+<strong>Line 51-56</strong>. Use instances of <code>RKObjectMapping</code> class to define object mappings. Simple mappings are self explained. Note that <code>RKObjectMapping</code> provides several different <code>mapXXX</code> methods to suit different use cases. The key path in mapping definition fully follows Cocoa's key path style (also support <a href="http://developer.apple.com/library/ios/#documentation/cocoa/conceptual/KeyValueCoding/Articles/CollectionOperators.html">collection operators</a>). Check <a href="http://restkit.org/api/master/Classes/RKObjectManager.html">its document</a> and Apple's <a href="http://developer.apple.com/library/ios/#documentation/cocoa/conceptual/KeyValueCoding/Articles/KeyValueCoding.html">Key Value Coding Guide</a> for detail.<br>
+<strong>Line 58-61</strong>. Complex object mappings are defined by <code>mapKeyPath:toRelationship:withMapping:</code> or similar methods. They map some key path to pre-defined object mappings. As seen in the code, the mapping to class <code>UsersLogin</code> contains simple mapping (<em>line 59</em>) and relationship mappings (<em>line 60-61</em>).<br>
+<strong>Line 64-67</strong>. <code>RKObjectManager</code> provides <code>loadObjectsAtResourcePath:objectMapping:delegate:</code> method to do these steps in order: combine resource path with the global <code>BaseURL</code> (configured within the <code>RKObjectManager</code> singleton), load resource from web services, parse return data, transform to local objects according to pre-defined <code>RKObjectMapping</code> instance, at last call the delegate to handle result.<br>
+<strong>Line 72-80</strong>. Delegate methods <code>didLoadObjects</code> and <code>didFailWithError</code> (<em>required</em>) are called after the object mapping process. Normally fetch the result object and do whatever you want.</p>
+<h2 id="routing">Routing</h2>
+<p>The previous code list is neat except one part. Note <strong>line 64-66</strong>, in which we hard-code the API endpoint and parameters. In our <code>login</code> scenario it may not be a big problem, but for highly reused objects, repeatedly constructing <code>GET</code> <code>POST</code> <code>PUT</code> <code>DELETE</code> URLs by hand could be real pain in the ass. How about more object-oriented and more elegant way, just like the <a href="http://guides.rubyonrails.org/routing.html">routing system in Ruby on Rails</a>?</p>
+<p>RestKit is most suitable for developers who has RoR background because of its <strong>Routing</strong> system which is highly alike to RoR's, but built on Cocoa's idiomatic key-value coding way. Here is the code sample:</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-objc" data-lang="objc"><span style="color:#75715e">// The router belongs to the object manager, just as mappers
+</span><span style="color:#75715e"></span>RKObjectRouter <span style="color:#f92672">*</span>router <span style="color:#f92672">=</span> [[RKObjectManager sharedManager] router];
+  
+[router routeClass:[User <span style="color:#66d9ef">class</span>] toResourcePath:<span style="color:#e6db74">@&#34;</span><span style="color:#e6db74">/users/:id</span><span style="color:#e6db74">&#34;</span>];
+[router routeClass:[User <span style="color:#66d9ef">class</span>] toResourcePath:<span style="color:#e6db74">@&#34;</span><span style="color:#e6db74">/users</span><span style="color:#e6db74">&#34;</span> forMethod:RKRequestMethodPOST];
+
+<span style="color:#75715e">// Then we can call the GET POST PUT DELETE verbs directly from object manager
+</span><span style="color:#75715e"></span>User <span style="color:#f92672">*</span>me <span style="color:#f92672">=</span> [[User alloc] init];
+me.userName <span style="color:#f92672">=</span> <span style="color:#e6db74">@&#34;</span><span style="color:#e6db74">soulhacker</span><span style="color:#e6db74">&#34;</span>;
+[[RKObjectManager sharedManager] postObject:me delegate:self];
+
+User <span style="color:#f92672">*</span>sb2nuke <span style="color:#f92672">=</span> [[User alloc] init];
+sb2nuke.<span style="color:#66d9ef">id</span> <span style="color:#f92672">=</span> [NSNumber numberWithInt:<span style="color:#ae81ff">13</span>];
+[[RKObjectManager sharedManager] deleteObject:sb2nuke delegate:self];
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>Line 4</strong> set the <em>default</em> route of <code>User</code> class, which means when you call object manager's <code>getObject</code> <code>postObject</code> <code>putObject</code> <code>deleteObject</code> methods the requests will go to <code>@&quot;/users/:id&quot;</code>. This is a colon coded endpoint and what is after the colon is the name of a <em>method</em> in the route class, whose return value will replace the colon part.<br>
+<strong>Line 5</strong> set a special route for <code>postObject</code> method, which will override the setting in default route.<br>
+<strong>Line 10</strong> requests <code>@&quot;/users&quot;</code> with HTTP <code>POST</code> method and RestKit will transform <code>me</code> object into post data form as the way defined in object mapper of class User.<br>
+<strong>Line 14</strong> first call <code>[sb2nuke id]</code> method to get the value and replace <code>:id</code> with it, then requests <code>@&quot;/users/13&quot;</code> with HTTP <code>DELETE</code> method, which (should) remove the user object with id 13 from the server.</p>
+<p>So you see, RestKit provides very flexible tools for RESTful web services integration: you can use the network layer and do all data mapping by hand, or you can use the object mapping to do it completely within local object system, or you can tuning it in some intermediate way. No matter which solution you choose remember to align the protocol between the server and client side, and don't forget to verify them to the Android platform if necessary (there is no RestKit over there for now -_-).</p>
+<p>Thus we've completed the first part of this introduction guide. Below we will discuss some facilities bundled in RestKit to make our life better.</p>
+<h2 id="the-request-queue">The Request Queue</h2>
+<p>Request queue is the most important support player under the hood. <code>RKRequestQueue</code> is behind nearly all network access within RestKit and provides elegant solution for critical memory and bandwidth problems. <code>RKRequestQueue</code> wraps memory management within RestKit framework so you'll never see any <code>retain</code> <code>release</code> <code>autorelease</code> for <code>RKRequest</code> <code>RKResponse</code> instances. It let us developers focus on the business with very little concern about the memory management.</p>
+<p><code>RKRequestQueue</code> also provides seamless integration with Reachability API (in iOS System Configuration framework), pooling all requests when network is unavailable, and limiting concurrent requests when network becomes reachable to prevent overburden as well.</p>
+<p>All the amazing features described above are working without knowing, and maybe the only visible part of <code>RKRequestQueue</code> is its <em>request lifecycle management</em> feature, by which you can cancel ongoing requests to prevent wasting the bandwidth. This is a common situation in mobile apps that when some user action generates a bunch of network requests and the following action actually makes those requests useless (e.g. the view for previous action is dismissed by the later action). By using <code>RKRequestQueue</code> we can do it very easily by its <code>cancelRequest:</code> <code>cancelRequestsWithDelegate:</code> and  cancelAllRequests:` methods. And remember that whether and when to call them is fully determined by developers so you can choose the strategy wisely according to the different scenarios. Here is the simplest sample:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-objc" data-lang="objc">- (<span style="color:#66d9ef">void</span>)<span style="color:#a6e22e">viewWillAppear:</span>(<span style="color:#66d9ef">BOOL</span>)animated {
+    [RKClient sharedClient] get:<span style="color:#e6db74">@&#34;</span><span style="color:#e6db74">users/self</span><span style="color:#e6db74">&#34;</span> delegate:self];
+}
+
+- (<span style="color:#66d9ef">void</span>)<span style="color:#a6e22e">viewWillDisappear:</span>(<span style="color:#66d9ef">BOOL</span>)animated {
+    [[RKRequestQueue sharedQueue] cancelRequestsWithDelegate:self];
+}
+</code></pre></div><p>The <code>cancelRequestsWithDelegate:</code> method cancel all requests that current controller is delegate for. If there are no one processing it'll do nothing.</p>
+<p>The last but not least. What <code>[RKRequestQueue sharedQueue]</code> returns is the default queue which created automatically when the RestKit client initialized. In most real world apps it's not enough. For example we may need a queue to handle special resource intensive tasks in a background thread, such as data uploading/downloading, while the default queue keep working for  responding user actions. It's easy:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-objc" data-lang="objc">RKRequestQueue<span style="color:#f92672">*</span> queue <span style="color:#f92672">=</span> [[RKRequestQueue alloc] init];
+queue.delegate <span style="color:#f92672">=</span> self;
+queue.concurrentRequestsLimit <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;
+queue.showsNetworkActivityIndicatorWhenBusy <span style="color:#f92672">=</span> YES;
+
+<span style="color:#75715e">// Add some requests to it and make it start
+</span><span style="color:#75715e"></span>[queue addRequest:[
+    [RKClient sharedClient] requestWithResourcePath:<span style="color:#e6db74">@&#34;</span><span style="color:#e6db74">users/1</span><span style="color:#e6db74">&#34;</span> delegate:self]];
+[queue addRequest:[
+    [RKClient sharedClient] requestWithResourcePath:<span style="color:#e6db74">@&#34;</span><span style="color:#e6db74">users/2</span><span style="color:#e6db74">&#34;</span> delegate:self]];
+[queue addRequest:[
+    [RKClient sharedClient] requestWithResourcePath:<span style="color:#e6db74">@&#34;</span><span style="color:#e6db74">users/3</span><span style="color:#e6db74">&#34;</span> delegate:self]];
+ 
+[queue start];
+</code></pre></div><h2 id="reachability">Reachability</h2>
+<p>Reachability is the problem all mobile apps have to face and of course iOS provides solution for that, well, sort of. The problem is: <code>SCNetworkReachability</code> (in <code>SystemConfiguration</code> framework) is implemented as low level C APIs and not so easy to use. Fortunately RestKit is bundled with a very straight-forward Objective-C wrapper for that, the <code>RKReachabilityObserver</code>.</p>
+<p>When RKClient (or RKObjectManager) is initialized with some base URL, RestKit automatically initializes an instance of RKReachabilityObserver targeted at the host specified in the base URL and can be accessed via <code>baseURLReachabilityObserver</code> property. This observer also automatically registers <code>RKReachabilityStateChangedNotification</code> events in the default notification center. So in most cases we can use it in very simple way:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-objc" data-lang="objc">- (<span style="color:#66d9ef">id</span>)<span style="color:#a6e22e">init</span> {
+    <span style="color:#66d9ef">if</span> ((self <span style="color:#f92672">=</span> [super init])) {
+        [[NSNotificationCenter defaultCenter] addObserver:self 
+            selector:<span style="color:#66d9ef">@selector</span>(reachabilityChanged:) 
+            name:RKReachabilityStateChangedNotification 
+            object:nil];
+    }
+ 
+    <span style="color:#66d9ef">return</span> self;
+}
+ 
+- (<span style="color:#66d9ef">void</span>)<span style="color:#a6e22e">reachabilityChanged:</span>(NSNotification<span style="color:#f92672">*</span>)notification {
+    RKReachabilityObserver <span style="color:#f92672">*</span>observer <span style="color:#f92672">=</span> (RKReachabilityObserver <span style="color:#f92672">*</span>)[notification object];
+
+    <span style="color:#66d9ef">if</span> ([observer isNetworkAvailable]) {
+        NSLog(<span style="color:#e6db74">@&#34;</span><span style="color:#e6db74">We&#39;re online!</span><span style="color:#e6db74">&#34;</span>);
+
+        <span style="color:#66d9ef">if</span> (RKReachabilityReachableViaWiFi <span style="color:#f92672">=</span><span style="color:#f92672">=</span> [observer networkStatus]) {
+            NSLog(<span style="color:#e6db74">@&#34;</span><span style="color:#e6db74">…via WiFi.</span><span style="color:#e6db74">&#34;</span>);
+        } 
+        <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (RKReachabilityReachableViaWWAN <span style="color:#f92672">=</span><span style="color:#f92672">=</span> [observer networkStatus]) {
+            NSLog(<span style="color:#e6db74">@&#34;</span><span style="color:#e6db74">…via mobile network.</span><span style="color:#e6db74">&#34;</span>);
+        }
+    }
+    <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> ([observer isConnectionRequired]) {
+        NSLog(<span style="color:#e6db74">@&#34;</span><span style="color:#e6db74">Mobile network may be available if we open a connection...</span><span style="color:#e6db74">&#34;</span>);
+    } 
+    <span style="color:#66d9ef">else</span> {
+        NSLog(<span style="color:#e6db74">@&#34;</span><span style="color:#e6db74">We&#39;re offline!</span><span style="color:#e6db74">&#34;</span>);
+    }
+}
+</code></pre></div><h2 id="sending-multi-part-data">Sending Multi-part Data</h2>
+<p>Sending multi-part data through HTTP requests is very common requirement and incredibly difficult in most programming languages. RestKit uses <code>RKParams</code> and <code>RKParamsAttachment</code> to handle that problem. <code>RKParams</code> is the container that can hold any kinds of parameters. For simple data type it works just like a NSDictionary, and for multi-part data it can wrap <code>NSData</code> and/or <code>RKParamsAttachment</code> objects. Both <code>RKParams</code> and <code>RKParamsAttachment</code> are MIME type friendly. The following self-explained code sample shows all:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-objc" data-lang="objc">NSString<span style="color:#f92672">*</span> filePath <span style="color:#f92672">=</span> <span style="color:#e6db74">@&#34;</span><span style="color:#e6db74">/path/to/avatar.jpg</span><span style="color:#e6db74">&#34;</span>;
+RKParams<span style="color:#f92672">*</span> params <span style="color:#f92672">=</span> [RKParams params];
+ 
+[params setValue:<span style="color:#e6db74">@&#34;</span><span style="color:#e6db74">Neo</span><span style="color:#e6db74">&#34;</span> forParam:<span style="color:#e6db74">@&#34;</span><span style="color:#e6db74">name</span><span style="color:#e6db74">&#34;</span>];
+[params setValue:<span style="color:#e6db74">@&#34;</span><span style="color:#e6db74">soulhacker@matrix.net</span><span style="color:#e6db74">&#34;</span> forParam:<span style="color:#e6db74">@&#34;</span><span style="color:#e6db74">email</span><span style="color:#e6db74">&#34;</span>];
+ 
+RKParamsAttachment<span style="color:#f92672">*</span> attachment <span style="color:#f92672">=</span> [params setFile:filePath forParam:<span style="color:#e6db74">@&#34;</span><span style="color:#e6db74">avatar</span><span style="color:#e6db74">&#34;</span>];
+attachment.MIMEType <span style="color:#f92672">=</span> <span style="color:#e6db74">@&#34;</span><span style="color:#e6db74">image/jpeg</span><span style="color:#e6db74">&#34;</span>;
+attachment.fileName <span style="color:#f92672">=</span> <span style="color:#e6db74">@&#34;</span><span style="color:#e6db74">avatar.jpg</span><span style="color:#e6db74">&#34;</span>;
+ 
+UIImage<span style="color:#f92672">*</span> image <span style="color:#f92672">=</span> [UIImage imageNamed:<span style="color:#e6db74">@&#34;</span><span style="color:#e6db74">wallpaper.png</span><span style="color:#e6db74">&#34;</span>];
+NSData<span style="color:#f92672">*</span> imageData <span style="color:#f92672">=</span> UIImagePNGRepresentation(image);
+[params setData:imageData MIMEType:<span style="color:#e6db74">@&#34;</span><span style="color:#e6db74">image/png</span><span style="color:#e6db74">&#34;</span> forParam:<span style="color:#e6db74">@&#34;</span><span style="color:#e6db74">wallpaper</span><span style="color:#e6db74">&#34;</span>];
+ 
+NSLog(<span style="color:#e6db74">@&#34;</span><span style="color:#e6db74">ContentType = %@, ContentLength = %@</span><span style="color:#e6db74">&#34;</span>, 
+    [params HTTPHeaderValueForContentType],
+    [params HTTPHeaderValueForContentLength]);
+ 
+<span style="color:#75715e">// Send a Request!
+</span><span style="color:#75715e"></span>[[RKClient sharedClient] post:<span style="color:#e6db74">@&#34;</span><span style="color:#e6db74">/upload</span><span style="color:#e6db74">&#34;</span> params:params delegate:self];
+</code></pre></div><h2 id="background-uploaddownload">Background Upload/Download</h2>
+<p>iOS supported multi-tasking since 4.0 but it's a highly restricted support and there are so many misconceptions among the users and even developers. I would strongly suggest Fraser Speirs&rsquo; <a href="http://speirs.org/blog/2012/1/2/misconceptions-about-ios-multitasking.html">excellent blog</a> which explains all about iOS multi-tasking.</p>
+<p>RestKit can seamlessly facilitate multi-tasking to prevent important long-time requests being interrupted by user switching out of the app. The key is the <code>backgroundPolicy</code> property of <code>RKRequest</code> which can be one of 4 enum values:</p>
+<ul>
+<li><code>RKRequestBackgroundPolicyNone</code>: the default value, do nothing for backgrounding;</li>
+<li><code>RKRequestBackgroundPolicyCancel</code>: cancel the request when app switches to background;</li>
+<li><code>RKRequestBackgroundPolicyContinue</code>: continue the request in background;</li>
+<li><code>RKRequestBackgroundPolicyRequeue</code>: place the request back to the queue for next activation.</li>
+</ul>
+<p>So to make a request continue to work in background, just set its <code>backgroundPolicy</code> property as below:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-objc" data-lang="objc">RKRequest<span style="color:#f92672">*</span> request <span style="color:#f92672">=</span> [[RKClient sharedClient] post:<span style="color:#e6db74">@&#34;</span><span style="color:#e6db74">/upload</span><span style="color:#e6db74">&#34;</span> delegate:self];
+request.backgroundPolicy <span style="color:#f92672">=</span> RKRequestBackgroundPolicyContinue;
+</code></pre></div><h2 id="conclusion">Conclusion</h2>
+<p>RestKit is a clean and elegant solution for iOS app to interact with RESTful web services. It encapsulates many everyday work into a tiny yet powerful framework and extremely easy to use. Suggest every iOS developers to give it a try.</p>
+<h2 id="references">References</h2>
+<ul>
+<li><a href="http://restkit.org/api/master/">RestKit References (master branch)</a></li>
+<li><a href="https://github.com/RestKit/RestKit/wiki/Tutorial-%3A-Introduction-to-RestKit">Tutorial: Introduction to RestKit</a></li>
+<li><a href="http://mobile.tutsplus.com/tutorials/iphone/advanced-restkit-development_iphone-sdk/">Advanced RestKit Development</a></li>
+<li><a href="https://github.com/RestKit/RestKit/wiki/Solution-Recipes">RestKit Solution Recipes</a></li>
+</ul>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p>In fact ASIHTTPRequest has been <a href="http://allseeing-i.com/%5Brequest_release%5D">abandoned</a> since September 2011, and RestKit is one of replacements its author suggested. <a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2" role="doc-endnote">
+<p>The JSON parsing layer is pluggable, default to <a href="https://github.com/johnezang/JSONKit">JSONKit</a>. And I haven't mentioned the <em>old</em> XML, have I? <a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:3" role="doc-endnote">
+<p>Created by <a href="mailto:jverkoey@gmail.com">Jeff Verkoeyen</a>, the author of <a href="https://github.com/jverkoey/nimbus">Nimbus</a>, the highly improved successor of Facebook's Three20. <a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
+
+</article>
+
+
+<section class="post-nav">
+    <ul>
+        
+        <li>
+            <a href="/posts/back-end-is-hard/"><i class="fa fa-chevron-circle-left"></i> Back-end is Hard</a>
+        </li>
+        
+        
+        <li>
+            <a href="/posts/go-for-android/">Go for Android <i class="fa fa-chevron-circle-right"></i> </a>
+        </li>
+        
+    </ul>
+</section>
+    
+    
+
+
+
+
+
+</main>
+    <footer>
+        <h6>Copyright © 2020 - Neo Lee |
+            Rendered by <a href="https://gohugo.io" title="Hugo">Hugo</a> |
+            <a href="/index.xml">Subscribe </a></h6>
+    </footer>
+</div>
+<script src="/js/scripts.js"></script>
+
+</body>
+
+</html>
+

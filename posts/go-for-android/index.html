@@ -1,0 +1,326 @@
+<!doctype html>
+
+<html lang="en-us">
+
+<head>
+  <title>Go for Android | Paradigm X</title>
+  <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="The HTML5 Herald" />
+<meta name="author" content="Neo Lee" /><meta property="og:title" content="Go for Android" />
+<meta property="og:description" content="Go is the language from Google and Android is the mobile OS from Google. The bond between them are just born with. So there should be no surprise that we can use Go to write Android programs, though some important restricts for now:
+
+There is no Android SDK for Go, so no system API nor GUI for Go program on Android.
+Go doesn&#39;t support JNI for now. So Go programs have to be compiled as separate executables, wrapped as assets in apk and called within Java based apps.
+Maybe cross-compiling is really hard. We cannot build Android applications which use Cgo(C bridge for Go) on our desktop computer for now, as shown below.
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/posts/go-for-android/" />
+<meta property="article:published_time" content="2012-02-05T19:42:00+08:00" />
+<meta property="article:modified_time" content="2012-02-05T19:42:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Go for Android"/>
+<meta name="twitter:description" content="Go is the language from Google and Android is the mobile OS from Google. The bond between them are just born with. So there should be no surprise that we can use Go to write Android programs, though some important restricts for now:
+
+There is no Android SDK for Go, so no system API nor GUI for Go program on Android.
+Go doesn&#39;t support JNI for now. So Go programs have to be compiled as separate executables, wrapped as assets in apk and called within Java based apps.
+Maybe cross-compiling is really hard. We cannot build Android applications which use Cgo(C bridge for Go) on our desktop computer for now, as shown below.
+"/>
+
+<meta name="generator" content="Hugo 0.62.1" />
+    
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha256-l85OmPOjvil/SOvVt3HnSSjzF1TUMyT9eV0c2BzEGzU=" crossorigin="anonymous" />
+  <link rel="stylesheet" href="/fontawesome/css/all.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab|Ruda" />
+  <link rel="stylesheet" type="text/css" href="/css/styles.css" /><link rel='stylesheet' href='/css/main.css'></head>
+
+<body>
+  <div id="container">
+    <header>
+      <h1>
+                <a href="/">Paradigm X</a>
+            </h1>
+
+      <ul id="social-media">
+             <li>
+               <a href="https://github.com/neolee" title="GitHub">
+               <i class="fab fa-github fa-lg"></i>
+               </a>
+             </li>
+             <li>
+               <a href="https://twitter.com/soulhacker" title="Twitter">
+               <i class="fab fa-twitter fa-lg"></i>
+               </a>
+             </li>
+      </ul>
+      
+      <p><em>Vision quests of a soulhacker</em></p>
+      
+    </header>
+
+    
+<nav>
+    <ul>
+        
+        <li>
+            <a class="" href="/tags">
+                <i class="fa-li fa  fa-lg"></i><span>Tags</span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="" href="/posts/">
+                <i class="fa-li fa  fa-lg"></i><span>All Posts</span>
+            </a>
+        </li>
+        
+    </ul>
+</nav>
+
+    <main>
+
+
+
+
+<article>
+
+    <h1>Go for Android</h1>
+
+    
+    <aside>
+    <ul>
+        <li>
+            <time class="post-date" datetime="2012-02-05T19:42:00&#43;08:00">Feb 5, 2012</time>
+        </li>
+        
+
+        
+        <li>
+            <em>
+                
+                    
+                    <a href="/tags/programming">#Programming</a>
+                
+            </em>
+        </li>
+        
+
+        <li>5 minutes read</li>
+    </ul>
+</aside>
+
+    
+
+    
+
+    <p><a href="http://golang.org/">Go</a> is <em>the</em> language from Google and Android is <em>the</em> mobile OS from Google. The bond between them are just born with. So there should be no surprise that we can use Go to write Android programs, though some important restricts for now:</p>
+<ul>
+<li>There is no Android SDK for Go, so no system API nor GUI for Go program on Android.</li>
+<li>Go doesn't support JNI for now. So Go programs have to be compiled as separate executables, wrapped as assets in apk and called within Java based apps.</li>
+<li>Maybe cross-compiling is really hard. We cannot build Android applications which use Cgo(C bridge for Go) on our desktop computer for now, as shown below.</li>
+</ul>
+<p>But it's not just a toy because of the following advantages:</p>
+<ul>
+<li>Go is <em>fast</em> and all C programmers just like it.</li>
+<li>Go language is bundled with high quality libraries, especially suitable for special tasks.</li>
+<li>Go is from Google! It does have a future! Well, at least let's hope so.</li>
+</ul>
+<p>Go is a very young language, thus there's few guides or tutorials out there. But it also makes earlier investion provide more return. My friend and colleague <a href="https://twitter.com/#!/rarnu">@rarnu</a> also likes the idea of writing Android program using Go and has written <a href="http://blog.sina.com.cn/s/blog_68b671430100z4wn.html">a short tutorial</a>. I'd like to rewrite it here and fill all lost details which he was too lazy to include.</p>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li>C Tools
+<ul>
+<li>GCC, C standard library, bison, GNU Make and Awk</li>
+</ul>
+</li>
+<li><a href="http://mercurial.selenic.com/wiki/Download">Mercurial</a>
+<ul>
+<li><code>hg</code></li>
+</ul>
+</li>
+<li><a href="http://developer.android.com/sdk/installing.html">Android SDK</a>
+<ul>
+<li><code>adb</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="preparing-go-language">Preparing Go Language</h2>
+<p>Firstly some environment variables need to be set (better be added to <code>.bashrc</code> or <code>.zshrc</code> etc.):</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">export GOROOT<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span>$HOME<span style="color:#e6db74">/Code/Go/Home</span><span style="color:#e6db74">&#34;</span>
+export GOBIN<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span>$GOROOT<span style="color:#e6db74">/bin</span><span style="color:#e6db74">&#34;</span>
+export PATH<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span>$PATH<span style="color:#e6db74">:</span>$GOBIN<span style="color:#e6db74">:</span><span style="color:#e6db74">&#34;</span>
+</code></pre></div><p><code>GOROOT</code> should be the folder where Go source is in and <code>GOBIN</code> should be in the system <code>PATH</code>. Double check them and issue these commands in terminal:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">hg clone -u release https://go.googlecode.com/hg/ $GOROOT
+cd $GOROOT/src
+export GOOS<span style="color:#f92672">=</span>linux
+export GOARCH<span style="color:#f92672">=</span>arm
+./all.bash
+</code></pre></div><p>Now check out <code>$GOBIN</code> folder, three commands <code>go</code> <code>godoc</code> <code>gofmt</code>(<code>go</code> command line tools) and a folder <code>linux_arm</code>(cross-compiling tools for Linux/ARM targets) should be in there. <strong>Line 2-5</strong> can be run multiple times by setting different <code>$GOOS</code> and <code>$GOARCH</code> combinations to support <code>amd64</code> <code>386</code> and <code>arm</code> instruction sets all in one install base. See &ldquo;<a href="http://golang.org/doc/install/source">Installing Go from source</a>&rdquo; for detail.</p>
+<h2 id="hello-android-from-go">Hello Android from Go!</h2>
+<p>Now create Go source files for testing. Let's start with the most favorite &lsquo;Hello world!&rsquo; one.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+    println(<span style="color:#e6db74">&#34;Hello Android from Go!&#34;</span>)
+}
+</code></pre></div><p>Compile it and generate executable:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">CGO_ENABLED<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span> GOOS<span style="color:#f92672">=</span>linux GOARCH<span style="color:#f92672">=</span>arm go build -o hello-arm hello.go
+</code></pre></div><p>The last command will generate an executable named <code>hello-arm</code> which targets Linux/ARM system (i.e. Android). Now connect to an debuggable Android device and issue in the same folder:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">adb push hello-arm /data/local/
+adb shell
+/data/local/hello-arm
+</code></pre></div><p>If all things go right it will generate output as expected. Using the same routine showed above, all code examples on <a href="http://golang.org/">Go's homepage</a> can be verified working well on Android devices.</p>
+<h2 id="real-world-example">Real World Example</h2>
+<p>The following code example is borrowed from rarnu's <a href="http://blog.sina.com.cn/s/blog_68b671430100z4wn.html">blog post</a> and modified a bit.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+
+<span style="color:#f92672">import</span> (<span style="color:#e6db74">&#34;net/http&#34;</span>; <span style="color:#e6db74">&#34;flag&#34;</span>; <span style="color:#e6db74">&#34;os&#34;</span>; <span style="color:#e6db74">&#34;strconv&#34;</span>; <span style="color:#e6db74">&#34;encoding/json&#34;</span>; <span style="color:#e6db74">&#34;io/ioutil&#34;</span>)
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+    <span style="color:#a6e22e">flag</span>.<span style="color:#a6e22e">Parse</span>()
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">flag</span>.<span style="color:#a6e22e">NArg</span>() <span style="color:#f92672">!=</span> <span style="color:#ae81ff">1</span> {
+        <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Stdout</span>.<span style="color:#a6e22e">WriteString</span>(<span style="color:#e6db74">&#34;\n&#34;</span>)
+        <span style="color:#66d9ef">return</span>
+    }
+
+    <span style="color:#a6e22e">version</span>,<span style="color:#a6e22e">_</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">Atoi</span>(<span style="color:#a6e22e">flag</span>.<span style="color:#a6e22e">Arg</span>(<span style="color:#ae81ff">0</span>))
+    <span style="color:#a6e22e">res</span>,<span style="color:#a6e22e">_</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Get</span>(<span style="color:#e6db74">&#34;http://rarnu.7thgen.info/api/query_software_update.php&#34;</span>)
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">StatusCode</span> <span style="color:#f92672">!=</span> <span style="color:#ae81ff">200</span> {
+        <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Stdout</span>.<span style="color:#a6e22e">WriteString</span>(<span style="color:#e6db74">&#34;\n&#34;</span>)
+        <span style="color:#66d9ef">return</span>
+    }
+    <span style="color:#a6e22e">buf</span>,<span style="color:#a6e22e">_</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">ioutil</span>.<span style="color:#a6e22e">ReadAll</span>(<span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">Body</span>)
+
+    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">f</span> <span style="color:#66d9ef">interface</span>{}
+    <span style="color:#a6e22e">json</span>.<span style="color:#a6e22e">Unmarshal</span>(<span style="color:#a6e22e">buf</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">f</span>)
+    <span style="color:#a6e22e">m</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">f</span>.(<span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">string</span>]<span style="color:#66d9ef">interface</span>{});
+    <span style="color:#a6e22e">v</span>,<span style="color:#a6e22e">_</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">m</span>[<span style="color:#e6db74">&#34;lastver&#34;</span>];
+    <span style="color:#a6e22e">sver</span>,<span style="color:#a6e22e">_</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">Atoi</span>(<span style="color:#a6e22e">v</span>.(<span style="color:#66d9ef">string</span>))
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">sver</span> &gt; <span style="color:#a6e22e">version</span> {
+        <span style="color:#a6e22e">fn</span>,<span style="color:#a6e22e">_</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">m</span>[<span style="color:#e6db74">&#34;url&#34;</span>]
+        <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Stdout</span>.<span style="color:#a6e22e">WriteString</span>(<span style="color:#a6e22e">fn</span>.(<span style="color:#66d9ef">string</span>) <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;\n&#34;</span>)
+        <span style="color:#66d9ef">return</span>
+    }
+    <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Stdout</span>.<span style="color:#a6e22e">WriteString</span>(<span style="color:#e6db74">&#34;\n&#34;</span>)
+}
+</code></pre></div><p>Handling JSON data returned from web services in Go is pretty neat and clean, right? Build it as above:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">CGO_ENABLED<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span> GOOS<span style="color:#f92672">=</span>linux GOARCH<span style="color:#f92672">=</span>arm go build -o cu-arm checkupdate.go
+adb push cu-arm /data/local/
+adb shell
+/data/local/cu-arm <span style="color:#ae81ff">20</span>
+</code></pre></div><p>When running it on my Galaxy Nexus (ARM v7 dual-core 1.2 GHz Cortex-A9, Android 4.0.2 with kernel 3.0.8) it crashed on <strong>line 14</strong> - the <code>http.Get</code> call failed. Because of some issues in the cross-compiling system, all calls using Cgo will cause failure like that, at least for now. Unfortunately the <code>net</code> package depend on Cgo and nearly all useful applications need <code>net</code> package.</p>
+<h2 id="call-go-code-in-android-apps">Call Go Code in Android Apps</h2>
+<p>Exactly the same as calling any native executables in Android apps, which fully explained in <a href="http://gimite.net/en/index.php?Run%20native%20executable%20in%20Android%20App">this guide</a>. I'll list a more general and accurate solution below for convenience.</p>
+<p>The following Java class shows how to invoke a process in Android apps (actually it is used by Google itself), which is the base of the following guide:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">CommandResult</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">public</span> String result <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;</span><span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">public</span> String error <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;</span><span style="color:#f92672">;</span>
+
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#a6e22e">runCommand</span><span style="color:#f92672">(</span>String command<span style="color:#f92672">,</span> <span style="color:#66d9ef">boolean</span> root<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        Log<span style="color:#f92672">.</span><span style="color:#a6e22e">e</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;runCommand&#34;</span><span style="color:#f92672">,</span> command<span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+        
+        Process process <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
+        DataOutputStream os <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
+        DataInputStream stdout <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
+        DataInputStream stderr <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
+        CommandResult ret <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> CommandResult<span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+        <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
+            StringBuffer output <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> StringBuffer<span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+            StringBuffer error <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> StringBuffer<span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>root<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                process <span style="color:#f92672">=</span> Runtime<span style="color:#f92672">.</span><span style="color:#a6e22e">getRuntime</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">.</span><span style="color:#a6e22e">exec</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;su&#34;</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+                os <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> DataOutputStream<span style="color:#f92672">(</span>process<span style="color:#f92672">.</span><span style="color:#a6e22e">getOutputStream</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+                os<span style="color:#f92672">.</span><span style="color:#a6e22e">writeBytes</span><span style="color:#f92672">(</span>command <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;\n&#34;</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+                os<span style="color:#f92672">.</span><span style="color:#a6e22e">writeBytes</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;exit\n&#34;</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+                os<span style="color:#f92672">.</span><span style="color:#a6e22e">flush</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+            <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+                process <span style="color:#f92672">=</span> Runtime<span style="color:#f92672">.</span><span style="color:#a6e22e">getRuntime</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">.</span><span style="color:#a6e22e">exec</span><span style="color:#f92672">(</span>command<span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+            <span style="color:#f92672">}</span>
+
+            stdout <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> DataInputStream<span style="color:#f92672">(</span>process<span style="color:#f92672">.</span><span style="color:#a6e22e">getInputStream</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+            String line<span style="color:#f92672">;</span>
+            <span style="color:#66d9ef">while</span> <span style="color:#f92672">(</span><span style="color:#f92672">(</span>line <span style="color:#f92672">=</span> stdout<span style="color:#f92672">.</span><span style="color:#a6e22e">readLine</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">)</span> <span style="color:#f92672">!</span><span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                output<span style="color:#f92672">.</span><span style="color:#a6e22e">append</span><span style="color:#f92672">(</span>line<span style="color:#f92672">)</span><span style="color:#f92672">.</span><span style="color:#a6e22e">append</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#39;\n&#39;</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+            <span style="color:#f92672">}</span>
+            stderr <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> DataInputStream<span style="color:#f92672">(</span>process<span style="color:#f92672">.</span><span style="color:#a6e22e">getErrorStream</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+            <span style="color:#66d9ef">while</span> <span style="color:#f92672">(</span><span style="color:#f92672">(</span>line <span style="color:#f92672">=</span> stderr<span style="color:#f92672">.</span><span style="color:#a6e22e">readLine</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">)</span> <span style="color:#f92672">!</span><span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                error<span style="color:#f92672">.</span><span style="color:#a6e22e">append</span><span style="color:#f92672">(</span>line<span style="color:#f92672">)</span><span style="color:#f92672">.</span><span style="color:#a6e22e">append</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#39;\n&#39;</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+            <span style="color:#f92672">}</span>
+            process<span style="color:#f92672">.</span><span style="color:#a6e22e">waitFor</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+            ret<span style="color:#f92672">.</span><span style="color:#a6e22e">result</span> <span style="color:#f92672">=</span> output<span style="color:#f92672">.</span><span style="color:#a6e22e">toString</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">.</span><span style="color:#a6e22e">trim</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+            ret<span style="color:#f92672">.</span><span style="color:#a6e22e">error</span> <span style="color:#f92672">=</span> error<span style="color:#f92672">.</span><span style="color:#a6e22e">toString</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">.</span><span style="color:#a6e22e">trim</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>Exception e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            ret<span style="color:#f92672">.</span><span style="color:#a6e22e">result</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;</span><span style="color:#f92672">;</span>
+            ret<span style="color:#f92672">.</span><span style="color:#a6e22e">error</span> <span style="color:#f92672">=</span> e<span style="color:#f92672">.</span><span style="color:#a6e22e">getMessage</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span> <span style="color:#66d9ef">finally</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
+                <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>os <span style="color:#f92672">!</span><span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                    os<span style="color:#f92672">.</span><span style="color:#a6e22e">close</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+                <span style="color:#f92672">}</span>
+                <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>stdout <span style="color:#f92672">!</span><span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                    stdout<span style="color:#f92672">.</span><span style="color:#a6e22e">close</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+                <span style="color:#f92672">}</span>
+                <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>stderr <span style="color:#f92672">!</span><span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                    stderr<span style="color:#f92672">.</span><span style="color:#a6e22e">close</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+                <span style="color:#f92672">}</span>
+                process<span style="color:#f92672">.</span><span style="color:#a6e22e">destroy</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+            <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>Exception e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                ret<span style="color:#f92672">.</span><span style="color:#a6e22e">result</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;</span><span style="color:#f92672">;</span>
+                ret<span style="color:#f92672">.</span><span style="color:#a6e22e">error</span> <span style="color:#f92672">=</span> e<span style="color:#f92672">.</span><span style="color:#a6e22e">getMessage</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+            <span style="color:#f92672">}</span>
+        <span style="color:#f92672">}</span>
+
+        <span style="color:#66d9ef">return</span> ret<span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>To run a native executable (whether written in Go or not) in Android apps:</p>
+<ul>
+<li>Include the binary <code>go-exec</code> in the <code>assets</code> folder.</li>
+<li>Use <code>getAssets().open(&quot;go-exec&quot;)</code> to get an <code>InputStream</code>.</li>
+<li>Write it to <code>/data/data/app-package-name/</code>, where the app has access to write files and make it executable.</li>
+<li>Make it executable using the code above, i.e. <code>CommandResult.runCommand(&quot;/system/bin/chmod 744 /data/data/app-package-name/go-exec&quot;, 0)</code></li>
+<li>Run <code>/data/data/app-package-name/go-exec</code> using the code above.</li>
+</ul>
+<h3 id="updates">Updates</h3>
+<p><code>Go 1</code> is now live! Article updated to match changes in <code>Go 1</code>. And the <code>Go 1</code> <a href="http://golang.org/doc/go1.html">release note</a> is a must read.</p>
+
+</article>
+
+
+<section class="post-nav">
+    <ul>
+        
+        <li>
+            <a href="/posts/introducing-restkit/"><i class="fa fa-chevron-circle-left"></i> Introducing RestKit</a>
+        </li>
+        
+        
+        <li>
+            <a href="/posts/soul-link/">Soul Link <i class="fa fa-chevron-circle-right"></i> </a>
+        </li>
+        
+    </ul>
+</section>
+    
+    
+
+
+
+
+
+</main>
+    <footer>
+        <h6>Copyright © 2020 - Neo Lee |
+            Rendered by <a href="https://gohugo.io" title="Hugo">Hugo</a> |
+            <a href="/index.xml">Subscribe </a></h6>
+    </footer>
+</div>
+<script src="/js/scripts.js"></script>
+
+</body>
+
+</html>
+

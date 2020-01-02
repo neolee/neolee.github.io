@@ -1,0 +1,261 @@
+<!doctype html>
+
+<html lang="en-us">
+
+<head>
+  <title>A Brief Guide of (RESTful) SOA, Part II | Paradigm X</title>
+  <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="The HTML5 Herald" />
+<meta name="author" content="Neo Lee" /><meta property="og:title" content="A Brief Guide of (RESTful) SOA, Part II" />
+<meta property="og:description" content="In the first part of this series we have discussed the core concepts of RESTful architectural style and gives some guideline in how to define the system and prepare for defining the APIs specs, which will be covered in this part.
+Level III: Define and Tune the API
+Defining API specs is the most important part of all and it&#39;s a continuous progress in the whole lifecycle, mostly documentation oriented. A simple and neat document collaboration platform is very useful. I suggest facilitating tools such as MediaWiki or Markdown &#43; GitHub etc. Then you can follow these sections below." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/posts/a-brief-guide-of-soa-p2/" />
+<meta property="article:published_time" content="2012-10-17T20:53:00+08:00" />
+<meta property="article:modified_time" content="2012-10-17T20:53:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="A Brief Guide of (RESTful) SOA, Part II"/>
+<meta name="twitter:description" content="In the first part of this series we have discussed the core concepts of RESTful architectural style and gives some guideline in how to define the system and prepare for defining the APIs specs, which will be covered in this part.
+Level III: Define and Tune the API
+Defining API specs is the most important part of all and it&#39;s a continuous progress in the whole lifecycle, mostly documentation oriented. A simple and neat document collaboration platform is very useful. I suggest facilitating tools such as MediaWiki or Markdown &#43; GitHub etc. Then you can follow these sections below."/>
+
+<meta name="generator" content="Hugo 0.62.1" />
+    
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha256-l85OmPOjvil/SOvVt3HnSSjzF1TUMyT9eV0c2BzEGzU=" crossorigin="anonymous" />
+  <link rel="stylesheet" href="/fontawesome/css/all.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab|Ruda" />
+  <link rel="stylesheet" type="text/css" href="/css/styles.css" /><link rel='stylesheet' href='/css/main.css'></head>
+
+<body>
+  <div id="container">
+    <header>
+      <h1>
+                <a href="/">Paradigm X</a>
+            </h1>
+
+      <ul id="social-media">
+             <li>
+               <a href="https://github.com/neolee" title="GitHub">
+               <i class="fab fa-github fa-lg"></i>
+               </a>
+             </li>
+             <li>
+               <a href="https://twitter.com/soulhacker" title="Twitter">
+               <i class="fab fa-twitter fa-lg"></i>
+               </a>
+             </li>
+      </ul>
+      
+      <p><em>Vision quests of a soulhacker</em></p>
+      
+    </header>
+
+    
+<nav>
+    <ul>
+        
+        <li>
+            <a class="" href="/tags">
+                <i class="fa-li fa  fa-lg"></i><span>Tags</span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="" href="/posts/">
+                <i class="fa-li fa  fa-lg"></i><span>All Posts</span>
+            </a>
+        </li>
+        
+    </ul>
+</nav>
+
+    <main>
+
+
+
+
+<article>
+
+    <h1>A Brief Guide of (RESTful) SOA, Part II</h1>
+
+    
+    <aside>
+    <ul>
+        <li>
+            <time class="post-date" datetime="2012-10-17T20:53:00&#43;08:00">Oct 17, 2012</time>
+        </li>
+        
+
+        
+        <li>
+            <em>
+                
+                    
+                    <a href="/tags/architecture">#Architecture</a>
+                
+            </em>
+        </li>
+        
+
+        <li>6 minutes read</li>
+    </ul>
+</aside>
+
+    
+
+    
+
+    <p>In the <a href="/posts/a-brief-guide-of-soa-p1/">first part of this series</a> we have discussed the core concepts of RESTful architectural style and gives some guideline in how to define the system and prepare for defining the APIs specs, which will be covered in this part.</p>
+<h2 id="level-iii-define-and-tune-the-api">Level III: Define and Tune the API</h2>
+<p>Defining API specs is the most important part of all and it's a continuous progress in the whole lifecycle, mostly documentation oriented. A simple and neat document collaboration platform is very useful. I suggest facilitating tools such as <a href="http://www.mediawiki.org/">MediaWiki</a> or <a href="http://daringfireball.net/projects/markdown/">Markdown</a> + <a href="https://github.com">GitHub</a> etc. Then you can follow these sections below.</p>
+<h3 id="31-api-basics">3.1 API Basics</h3>
+<p>Use one or two pages to list basic information of the API system, including (but not constrained to):</p>
+<ul>
+<li><strong>General</strong>: general style and policy, versioning, request and response methods, i18n, etc.</li>
+<li><strong>Authorisation</strong>: step by step tutorial on connecting to the service (see section 3.2 below).</li>
+<li><strong>Request</strong>: all acceptable request formats w/ examples.</li>
+<li><strong>Response</strong>: response format w/ examples, error codes.</li>
+<li><strong>Misc</strong>: rate limits, auditing, etc.</li>
+</ul>
+<h3 id="32-one-token-to-rule-them-all">3.2 One Token to Rule Them All</h3>
+<p>Remember that for most developers using your APIs the most tricky part is the authentication and authorisation. For some reasons (compromise of security, performance and convenience) most web service systems use <code>token</code> to identify service clients. Here are some fundamental concepts:</p>
+<ul>
+<li><strong>Service</strong>, or the <strong>platform</strong> is the system hold the key resources and make resources accessible via some open APIs.</li>
+<li><strong>Client</strong>, or <strong>app</strong> is client application sending request to the <strong>service</strong>.</li>
+<li>Each of every <strong>client</strong> should <em>register</em> itself on the <strong>service platform</strong> and gain a pair of CLIENT_ID and CLIENT_SECRET to identify itself.</li>
+<li>After registration <strong>apps</strong> can request tokens from the <strong>platform</strong></li>
+<li>There are 2 types of <strong>services</strong> in most <strong>platform</strong>: (A) services related to a specific <em>user</em> in the platform; (B) services independent to <em>users</em>. They need different kinds of tokens:
+<ul>
+<li>For type (A): <strong>app</strong> should use its CLIENT_ID/CLIENT_SECRET, correlated user's ID and expected access profile (commonly called &lsquo;<em>scope</em>') to request the access token.</li>
+<li>For type (B): <strong>app</strong> should use its CLIENT_ID/CLIENT_SECRET and <em>scope</em> to request the access token.</li>
+</ul>
+</li>
+<li>As long as the access token issued to the <strong>app</strong>, <strong>app</strong> can use it to request designated service APIs， until the token expires or revoked by <strong>platform</strong> or <strong>app</strong> or the <em>user</em>.</li>
+</ul>
+<p>In many cases the <strong>platform</strong> cannot issue type (A) token to an <strong>app</strong> unless correlated user explicitly approve the request. That's where OAuth-like mechanisms make sense. In such cases, when <strong>platform</strong> receives request for issuing a token to some user, it will redirect the user to a page showing Approve/Decline buttons and continue the flow after the user explicitly approve the request. For detail info about the widely uses OAuth v2 protocol refer to the official <a href="http://tools.ietf.org/html/rfc6749">IETF RFC6749 document</a>.</p>
+<p>A platform should choose mechanism wisely and make the flows (app registration, token issuing/revoking/managing, etc.) clean, flexible and friendly to all potential client apps. Useful tutorials about all these flows are required.</p>
+<h3 id="33-api-taxonomy">3.3 API Taxonomy</h3>
+<p><strong>An API taxonomy</strong> can help to organise all APIs. It gives you and your clients&rsquo; developers very clean and structural view of your continuously evolving APIs. It also gives you a way to normalise the API endpoints&rsquo; URI patterns.</p>
+<p>API taxonomy is highly dependent to the business. But some general rules certainly helps:</p>
+<ol>
+<li>The response objects, which are defined in the <a href="/posts/a-brief-guide-of-soa-p1/">first part</a> of this article, are usually the <em>first dimension</em> of the taxonomy.</li>
+<li>The <em>second dimension</em> is usually related to the API URI patterns, which will described below.</li>
+</ol>
+<p>So let's look at some typical RESTful URI patterns.</p>
+<ul>
+<li><strong>Object</strong>
+<ul>
+<li><code>/:type</code> e.g. <code>/user</code>: Request this URI by <code>POST</code> will create a new object of designated type and return the object if succeeded.</li>
+<li><code>/:type/:id</code> e.g. <code>/user/2234</code>: Request this URI by <code>GET</code> <code>PUT</code> <code>DELETE</code> will fetch, change or delete designated object.</li>
+</ul>
+</li>
+<li><strong>Query</strong>
+<ul>
+<li><code>/:type/:catalog</code> e.g. <code>/user/all</code> <code>/user/query?name=foo</code>: Return one or more objects of designated type (using criteria in query string if needed).</li>
+</ul>
+</li>
+<li><strong>Aspect</strong> or <strong>Attribute</strong>
+<ul>
+<li><code>/:type/:id/:aspect</code> e.g. <code>/user/1532/friends</code> <code>/user/1532/pets</code>: Return zero or more objects of some type related to designated object. In our examples, user #1532's friends should be zero or more <em>user</em> objects, and user #1532's pets should be zero or more <em>pet</em> objects.</li>
+</ul>
+</li>
+<li><strong>Action</strong>
+<ul>
+<li><code>/:type/:id/:action</code> e.g. <code>/user/1532/follow</code> <code>/user/1532/report</code>: Perform certain action (<em>follow</em> somebody or <em>report</em> them as spam) to designated object.</li>
+</ul>
+</li>
+</ul>
+<p>As you can see, The last pattern is not so RESTful. A far more RESTful way to do things like <em>following somebody</em> may be: define an object type <code>relationship</code> and provide <code>POST /relationship</code> (with user A and B as parameters) to add a new relationship.</p>
+<p>All I can say is that both ways will work fine in most systems and I leave the decision up to you.</p>
+<p>Using <em>object type</em> and <em>pattern</em> as two dimensions of the API taxonomy is a very good start point. Almost all RESTful web service systems can put API endpoints into a matrix like below:</p>
+<table>
+<thead>
+<tr>
+<th align="center">Object</th>
+<th align="center">Query</th>
+<th align="center">Aspect</th>
+<th align="center">Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">user</td>
+<td align="center">search</td>
+<td align="center">friends pets</td>
+<td align="center">follow</td>
+</tr>
+<tr>
+<td align="center">pet</td>
+<td align="center">search cats dogs</td>
+<td align="center">master cousins</td>
+<td align="center">gift</td>
+</tr>
+<tr>
+<td align="center">house</td>
+<td align="center">search</td>
+<td align="center">residents</td>
+<td align="center"> </td>
+</tr>
+</tbody>
+</table>
+<p>Well, some special APIs will be hard to classify. Here are the most commonly used two (we won't discuss more, just list them here):</p>
+<ul>
+<li><code>compound</code>: combine several API requests into a batch and response the batch results altogether.</li>
+<li><code>realtime</code> or <code>stream</code>: stream realtime activity logs to the client, which needs very different mechanism to work out.</li>
+</ul>
+<h3 id="34-api-specs">3.4 API Specs</h3>
+<p>For every endpoints in the API matrix you need a consistent and clean spec which follows these rules:</p>
+<ul>
+<li><strong>Endpoint</strong>: basic info for calling the endpoint (complete URI, HTTP verbs, security options, etc.).</li>
+<li><strong>Parameters</strong>: list of all parameters, each of which should include <em>name</em>, <em>example</em>, <em>description</em>, <em>required or optional</em> and other useful information.</li>
+<li><strong>Response</strong>: all data fields in the response data. Each fields can be some plain value or a pre-defined business object structure, as described in the <a href="/posts/a-brief-guide-of-soa-p1/">first part</a> of this article.</li>
+<li><strong>Examples</strong>: clickable examples of calling this endpoint (see section 3.5 below).</li>
+</ul>
+<p>Here is a good documentation example from <a href="https://foursquare.com">foursquare</a> platform: <a href="https://developer.foursquare.com/docs/checkins/add">create a check-in</a>.</p>
+<h3 id="35-test-the-specs">3.5 Test the Specs</h3>
+<p>To give app developers&rsquo; and yourself a better life, you need an API test console from the first day. It can be a command line tool or a GUI tool or, the easiest and most convenient way, a browser based tool. In the test console user can input token and API endpoint, choose HTTP verb, input parameters and get 100% real response data, in nicely formatted JSON format. It can save tons of time and money. Have a look at foursquare's <a href="https://developer.foursquare.com/docs/explore#req=users/self">online API explorer</a> for some real world example.</p>
+<p>Further more, an automatic regressive testing solution should be considered as early as possible. Web services are entries of your business and API implementation will surely be in a continuously developing progress. After any changes a series of strict tests must be automatically executed to confirm that all APIs are still working as intended. Use a high productivity dynamic language such as Ruby or Python to write a simple but complete client lib for your APIs and build test case for every defined API endpoints. Personally I like Ruby w/ RSpec but many other languages and frameworks also work fine.</p>
+<p><strong>To be continued&hellip;</strong></p>
+<p>In the final part of this series we will talk about implementation of the API specs.</p>
+
+</article>
+
+
+<section class="post-nav">
+    <ul>
+        
+        <li>
+            <a href="/posts/europe-summer-2012-and-500px/"><i class="fa fa-chevron-circle-left"></i> Europe Summer 2012 and 500px</a>
+        </li>
+        
+        
+        <li>
+            <a href="/posts/a-brief-guide-of-soa-p3/">A Brief Guide of (RESTful) SOA, Part III <i class="fa fa-chevron-circle-right"></i> </a>
+        </li>
+        
+    </ul>
+</section>
+    
+    
+
+
+
+
+
+</main>
+    <footer>
+        <h6>Copyright © 2020 - Neo Lee |
+            Rendered by <a href="https://gohugo.io" title="Hugo">Hugo</a> |
+            <a href="/index.xml">Subscribe </a></h6>
+    </footer>
+</div>
+<script src="/js/scripts.js"></script>
+
+</body>
+
+</html>
+

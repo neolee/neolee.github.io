@@ -1,0 +1,292 @@
+<!doctype html>
+
+<html lang="en-us">
+
+<head>
+  <title>A Brief Guide of (RESTful) SOA, Part I | Paradigm X</title>
+  <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="The HTML5 Herald" />
+<meta name="author" content="Neo Lee" /><meta property="og:title" content="A Brief Guide of (RESTful) SOA, Part I" />
+<meta property="og:description" content="Many say that XML SOAP WS-\* suck and SOA is over or becoming profit tool for big consultant companies. But I would say: SOA is not evil, IBM is. Look at these principles of SOA:
+
+
+reuse, granularity, modularity, composability, componentization and interoperability.
+standards-compliance (both common and industry-specific).
+services identification and categorization, provisioning and delivery, and monitoring and tracking.
+
+&ndash; Wikipedia Service-oriented architecture
+
+All these are perfect software architectural styles(well, except those words your spell checker complains), our best dream. These can&#39;t be wrong. The problem is in the implementations. Fortunately the rises of RESTful services on the open web prove that the spirit of SOA can really matters. Maybe one day similar architecture and implementation will eventually change enterprise computing in return." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/posts/a-brief-guide-of-soa-p1/" />
+<meta property="article:published_time" content="2012-04-27T16:53:00+08:00" />
+<meta property="article:modified_time" content="2012-04-27T16:53:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="A Brief Guide of (RESTful) SOA, Part I"/>
+<meta name="twitter:description" content="Many say that XML SOAP WS-\* suck and SOA is over or becoming profit tool for big consultant companies. But I would say: SOA is not evil, IBM is. Look at these principles of SOA:
+
+
+reuse, granularity, modularity, composability, componentization and interoperability.
+standards-compliance (both common and industry-specific).
+services identification and categorization, provisioning and delivery, and monitoring and tracking.
+
+&ndash; Wikipedia Service-oriented architecture
+
+All these are perfect software architectural styles(well, except those words your spell checker complains), our best dream. These can&#39;t be wrong. The problem is in the implementations. Fortunately the rises of RESTful services on the open web prove that the spirit of SOA can really matters. Maybe one day similar architecture and implementation will eventually change enterprise computing in return."/>
+
+<meta name="generator" content="Hugo 0.62.1" />
+    
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha256-l85OmPOjvil/SOvVt3HnSSjzF1TUMyT9eV0c2BzEGzU=" crossorigin="anonymous" />
+  <link rel="stylesheet" href="/fontawesome/css/all.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab|Ruda" />
+  <link rel="stylesheet" type="text/css" href="/css/styles.css" /><link rel='stylesheet' href='/css/main.css'></head>
+
+<body>
+  <div id="container">
+    <header>
+      <h1>
+                <a href="/">Paradigm X</a>
+            </h1>
+
+      <ul id="social-media">
+             <li>
+               <a href="https://github.com/neolee" title="GitHub">
+               <i class="fab fa-github fa-lg"></i>
+               </a>
+             </li>
+             <li>
+               <a href="https://twitter.com/soulhacker" title="Twitter">
+               <i class="fab fa-twitter fa-lg"></i>
+               </a>
+             </li>
+      </ul>
+      
+      <p><em>Vision quests of a soulhacker</em></p>
+      
+    </header>
+
+    
+<nav>
+    <ul>
+        
+        <li>
+            <a class="" href="/tags">
+                <i class="fa-li fa  fa-lg"></i><span>Tags</span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="" href="/posts/">
+                <i class="fa-li fa  fa-lg"></i><span>All Posts</span>
+            </a>
+        </li>
+        
+    </ul>
+</nav>
+
+    <main>
+
+
+
+
+<article>
+
+    <h1>A Brief Guide of (RESTful) SOA, Part I</h1>
+
+    
+    <aside>
+    <ul>
+        <li>
+            <time class="post-date" datetime="2012-04-27T16:53:00&#43;08:00">Apr 27, 2012</time>
+        </li>
+        
+
+        
+        <li>
+            <em>
+                
+                    
+                    <a href="/tags/architecture">#Architecture</a>
+                
+            </em>
+        </li>
+        
+
+        <li>9 minutes read</li>
+    </ul>
+</aside>
+
+    
+
+    
+
+    <p>Many say that <code>XML</code> <code>SOAP</code> <code>WS-\*</code> suck and SOA is over or becoming profit tool for big consultant companies. But I would say: SOA is <em>not</em> evil, IBM is. Look at these principles of SOA:</p>
+<blockquote>
+<ul>
+<li>reuse, granularity, modularity, composability, componentization and interoperability.</li>
+<li>standards-compliance (both common and industry-specific).</li>
+<li>services identification and categorization, provisioning and delivery, and monitoring and tracking.</li>
+</ul>
+<p>&ndash; <em>Wikipedia <a href="http://en.wikipedia.org/wiki/Service-oriented_architecture#Principles">Service-oriented architecture</a></em></p>
+</blockquote>
+<p>All these are perfect software architectural styles(well, except those words your spell checker complains), our best dream. These can't be wrong. The problem is in the implementations. Fortunately the rises of RESTful services on the open web prove that the spirit of SOA can really matters. Maybe one day similar architecture and implementation will eventually change enterprise computing in return.</p>
+<p>I always believe <strong>the service-oriented architecture will be the future of massive distributed software system</strong>. And <strong>RESTful services will replace web sites and eventually become the main body of the Internet</strong>. So I often think about how to help approaching it. I know that lots of people want to implement RESTful style services in their system (though they may not know what for). What they need is a brief and clean(maybe not extremely accurate and complete) guideline when practicing RESTful services. It can help to make things right and avoid traps such as using HTTP request as RPC protocol - it can be used as RPC protocol but it's not RESTful and cannot provide key benefits which REST want to apply.</p>
+<p>Here it is. Below I'll list a brief guide which can help you find the path, as in the Matrix movies Morpheus told Neo about the Oracle:</p>
+<blockquote>
+<p>&ldquo;Try not to think of it in terms of right and wrong. She is a guide. She can help you to find the path.&rdquo;</p>
+<p>&ndash; <em>Morpheus, The Matrix Movie</em></p>
+</blockquote>
+<p>Don't get me wrong, I tried my best to keep it right and accurate, but it's very complicated and cannot be completely covered and explained while keep it simple and readable. If you want more conceptual or technical details, I'll leave you a bunch of references.</p>
+<p>Even we have all these compromises this guide will still be too long for a single blog post, so I will divide it into 3 parts and complete them within a month or two.</p>
+<p><strong>NOTE:</strong> In this guide, <em>service oriented architecture</em> and <em>RESTful architecture style</em> are nearly the same concept. I will use the term <em>RESTful</em> from here on.</p>
+<h2 id="level-i-basic-definitions-and-rules">Level I: Basic Definitions and Rules</h2>
+<h3 id="11-objectives">1.1 Objectives</h3>
+<p>First of all you should know the purpose, why your service should follow the RESTful style and what benefits you can get. So when you get some trouble making architectural decision you can use these high level objectives to test all options: which one is the best for these objective?</p>
+<p><strong>Decoupled:</strong> Services are decoupled from each other and from service consumers. All services and service consumers can evolve independently. Service consumers can integrate different services more easily. For example, You can provide a good service interface and an ugly(but working) implementation, then improve the implementation before the service becoming very popular and requests crashing down your server.</p>
+<p><strong>More scalable and flexible:</strong> Services can be more easily changed, scaling, tuning, refactoring. Even when business changes, the services can be more easily changed to match the new business while keep compatibility with old business(clients).</p>
+<p><strong>Easier integration and mash-up:</strong> All services have uniform interfaces and similar behaviors. Clients to same service are exchangeable. Service integration, inter-op and mash-up are easier to implement.</p>
+<h3 id="12-core-principles">1.2 Core Principles</h3>
+<p>RESTful style requires:</p>
+<p><strong>A client-server model</strong> which provides better <em>separation of concerns</em>(SoC). The service provider(<em>server</em>) need not to know the user interfaces and HCIs while the service consumer(<em>client</em>) need not to know the data storage and infrastructure, which give far more opportunity for reusing and changing without pain.</p>
+<p><strong>Stateless:</strong> No client state or context will be stored on server between requests. Each request should contain all information necessary for the server to service the request, and any session state should be held in the client.</p>
+<p><strong>Cacheable:</strong> Clients can cache responses. Furthermore, server and client should have a protocol to define caching strategy: which response can be cached, for how long or till what happens, to prevent clients reusing inappropriate cached data.</p>
+<p><strong>Layered:</strong> System is layered and no cross layer info exposures. Client cannot tell whether it is directly connecting to the service provider or some intermediate layer, giving the interface is the same.</p>
+<p><strong>Uniform interface</strong> which makes server and client decoupled on implementation, enables each part to evolve independently. It's the most practical part so we will discuss it separately below.</p>
+<p>All these 5 rules are required. If a service violet any of them it cannot be called &lsquo;RESTful&rsquo; - and more important, cannot get the benefits which RESTful styles declare to provide. So understanding all of them is the most important pre-requisite.</p>
+<h2 id="level-ii-define-your-system">Level II: Define Your System</h2>
+<p>Before defining the APIs you should define your system first. You can do it through 2 steps:</p>
+<h3 id="21-business-abstraction">2.1 Business Abstraction</h3>
+<p>Business abstraction is <a href="/blog/2011/12/24/back-end-is-hard/">very important but hard to routinize</a>. And it's mostly beyond the realm which RESTful style can control. You should find the <em>essential</em> business concepts and make smart abstraction for high flexibility and extensibility. Yet we still can have some guideline. Probably will not solve the most difficult part of the problem but still give some help.</p>
+<p><strong>Find business objects.</strong> When the system complete, every business objects exposed to the public will be presented as an URI. Clients can issue <code>POST</code> <code>GET</code> <code>PATCH/PUT</code> <code>DELETE</code> requests to the URI to <code>CRUD</code>(create/read/update/delete) correlated object. <em>So any objects you want to exposed to the public for clients to do the <code>CRUD</code> things you should make them in the business object model, as essential objects.</em></p>
+<p><strong>Define the relations.</strong> Next step is to define the relations between objects. The classical entity-relation analysis methodology is very good at that. Find all <code>1-1</code> <code>1-*</code>  <code>*-*</code> etc. relations and make them clearly documented.</p>
+<p><strong>The object graph.</strong> It's optional but very useful. In most case build an <a href="http://en.wikipedia.org/wiki/Object_graph">object graph</a> at this stage will help to clarify many potential obscure concepts in the business object model. Try fill some real data in the object model and understand the order and constrains of each operation. Refine the object-relation model if necessary.</p>
+<h3 id="22-define-response-objects">2.2 Define Response Objects</h3>
+<p>Now define some response data formats. Some may feel weird to do that in such early stage but trust me it's the best path you can choose.</p>
+<p>Firstly you should know that as highly recommended by RESTful style, the object and its <em>representation</em> are isolated. The same object can have many different <em>representations</em> which can be designated by the clients when issuing the request.</p>
+<p>Second, do <em>NOT</em> try to invent your own <em>representation</em> type system, just use the well defined exist Internet media types(originally called MIME types), as defined in <a href="http://tools.ietf.org/html/rfc2046">RFC 2046</a>. Every system on the Internet have built-in support to it and all developers are familiar with <code>text/html</code> <code>application/json</code> <code>image/jpeg</code> <code>multipart/form-data</code> etc.</p>
+<p>Now define the <em>core</em> response objects, in JSON format. Normally when clients request for a business object e.g. <code>GET /user/:uid</code> the service will return a <code>user</code> object in JSON format(<code>application/json</code>). JSON has become the most widely used cross platform data exchange format these days. You can provide support for responses in other media types such as <code>text/html</code> <code>application/pdf</code> later. And here are some best practices for that:</p>
+<p><strong>Separate core attributes and other attributes.</strong> In most cases you should provide two versions of the same object type:</p>
+<ul>
+<li>The <em>compact</em> version which only contains the most frequently used core attributes of the object and very lightweight(for bandwidth and for parsing), which is often used embedded within other object or in arrays.</li>
+<li>The <em>detailed</em> version which contains all fields in the <em>compact</em> version plus more detail info, such as attributes not so frequently used and other objects related to this object, which is often used for clients retrieving a single object.</li>
+</ul>
+<p>Below is a demo:</p>
+<figure class="mid">
+    <img src="/images/posts/restful-soa-define-json-data.png"/> 
+</figure>
+
+<p><strong>Use embedded object not the object id.</strong> Assuming you are working on a online comment system and you have objects <code>user</code> and <code>post</code>. In <code>post</code> object there is an attribute <code>author</code> pointing to a <code>user</code> object. You should embedded a <em>compact</em> version of <code>user</code> object in the <code>post</code> object instead of only the user id. As shown in the snippet below:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// BAD style
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">post</span><span style="color:#f92672">:</span> {
+  <span style="color:#a6e22e">id</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">10010</span>,
+  <span style="color:#a6e22e">title</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;Hello&#34;</span>,
+  <span style="color:#a6e22e">body</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;Hi there!&#34;</span>,
+  <span style="color:#a6e22e">createdAt</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">1333250513</span>,
+  <span style="color:#a6e22e">author</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">1</span>,
+  ...
+}
+
+<span style="color:#75715e">// GOOD style
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">post</span><span style="color:#f92672">:</span> {
+  <span style="color:#a6e22e">id</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">10010</span>,
+  <span style="color:#a6e22e">title</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;Hello&#34;</span>,
+  <span style="color:#a6e22e">body</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;Hi there!&#34;</span>,
+  <span style="color:#a6e22e">createdAt</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">1333250513</span>,
+  <span style="color:#a6e22e">author</span><span style="color:#f92672">:</span> {
+    <span style="color:#a6e22e">id</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">1</span>,
+    <span style="color:#a6e22e">nickName</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;soulhacker&#34;</span>,
+    <span style="color:#a6e22e">avatar</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;&#34;</span>,
+    <span style="color:#a6e22e">status</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;Doing something matters&#34;</span>,
+    <span style="color:#a6e22e">online</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">true</span>,
+    ...
+  },
+  ...
+}
+</code></pre></div><p>In many cases this strategy will bring data redundancy but make client-side parsing and handling more convenient. Server-side implementation will be more structural and reusable as well.</p>
+<p><strong>Normalize array representation</strong> so clients can parse them using one single handler. Below is return data of some user search API:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#a6e22e">users</span><span style="color:#f92672">:</span> {
+  <span style="color:#a6e22e">total</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">126</span>, <span style="color:#75715e">// totally 126 users match this request
+</span><span style="color:#75715e"></span>  <span style="color:#a6e22e">count</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">10</span>, <span style="color:#75715e">// but we just return the first 10 records
+</span><span style="color:#75715e"></span>  <span style="color:#a6e22e">items</span><span style="color:#f92672">:</span> [
+    {
+      ... <span style="color:#75715e">// a compact user object inside 
+</span><span style="color:#75715e"></span>    }
+    ... <span style="color:#75715e">// 9 more user objects here
+</span><span style="color:#75715e"></span>  ]
+}
+</code></pre></div><p>Client-side handling can be very simple and reusable. Snippet below shows how it goes in Ruby:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e"># Utility methods</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e"></span><span style="color:#f92672"></span><span style="color:#a6e22e">countFromJSONCollection</span>(data)
+  <span style="color:#75715e"># data is a JSON object return from JSON.parse(response)</span>
+  <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span> <span style="color:#f92672"></span><span style="color:#66d9ef">if</span> data <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span>
+
+  total <span style="color:#f92672">=</span> data<span style="color:#f92672">[</span><span style="color:#e6db74">&#39;total&#39;</span><span style="color:#f92672">]</span>
+  count <span style="color:#f92672">=</span> data<span style="color:#f92672">[</span><span style="color:#e6db74">&#39;count&#39;</span><span style="color:#f92672">]</span>
+  <span style="color:#66d9ef">return</span> Integer(total), Integer(count)
+<span style="color:#66d9ef">end</span>
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e"></span><span style="color:#f92672"></span><span style="color:#a6e22e">itemsFromJSONCollection</span>(data, c)
+  <span style="color:#75715e"># c is a class with class method named fromJSON to init object</span>
+  <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span> <span style="color:#66d9ef">if</span> c <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span> <span style="color:#f92672">or</span> data <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span> <span style="color:#f92672">or</span> data<span style="color:#f92672">[</span><span style="color:#e6db74">&#39;items&#39;</span><span style="color:#f92672">]</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span>
+
+  count <span style="color:#f92672">=</span> data<span style="color:#f92672">[</span><span style="color:#e6db74">&#39;items&#39;</span><span style="color:#f92672">]</span><span style="color:#f92672">.</span>size
+  array <span style="color:#f92672">=</span> Array<span style="color:#f92672">.</span>new(count) { <span style="color:#f92672">|</span>i<span style="color:#f92672">|</span> c<span style="color:#f92672">.</span>fromJSON(data<span style="color:#f92672">[</span><span style="color:#e6db74">&#39;items&#39;</span><span style="color:#f92672">]</span><span style="color:#f92672">[</span>i<span style="color:#f92672">]</span>) }
+<span style="color:#66d9ef">end</span>
+
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Collection</span>
+  <span style="color:#66d9ef">attr_accessor</span> <span style="color:#e6db74">:total</span>, <span style="color:#e6db74">:count</span>, <span style="color:#e6db74">:items</span>
+  
+  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">self</span><span style="color:#f92672">.</span><span style="color:#a6e22e">fromJSON</span>(data<span style="color:#f92672">=</span><span style="color:#66d9ef">nil</span>, c<span style="color:#f92672">=</span><span style="color:#66d9ef">nil</span>)
+    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span> <span style="color:#66d9ef">if</span> data <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span> <span style="color:#f92672">or</span> c <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span>
+    
+    coll <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>new
+    coll<span style="color:#f92672">.</span>total, coll<span style="color:#f92672">.</span>count <span style="color:#f92672">=</span> countFromJSONCollection(data)
+    coll<span style="color:#f92672">.</span>items <span style="color:#f92672">=</span> itemsFromJSONCollection(data, c)
+    
+    coll
+  <span style="color:#66d9ef">end</span>
+<span style="color:#66d9ef">end</span>
+</code></pre></div><p><strong>Explicitly mark all required and optional fields.</strong> Not all data are equally important. As part of the protocol service providers should let clients know exactly which ones are optional. But remember HTTP is not a reliable communication protocol and the network status is even more complicated in mobile Internet, clients should do all error-tolerant things even for those fields marked as required.</p>
+<p><strong>To be continued&hellip;</strong></p>
+<p>In the following parts we will talk about how to define the API specs and give general info about concerns in implementation.</p>
+
+</article>
+
+
+<section class="post-nav">
+    <ul>
+        
+        <li>
+            <a href="/posts/soul-link/"><i class="fa fa-chevron-circle-left"></i> Soul Link</a>
+        </li>
+        
+        
+        <li>
+            <a href="/posts/wanted-image-website-tool-not-suck/">WANTED: Image Website Tool Not Suck <i class="fa fa-chevron-circle-right"></i> </a>
+        </li>
+        
+    </ul>
+</section>
+    
+    
+
+
+
+
+
+</main>
+    <footer>
+        <h6>Copyright © 2020 - Neo Lee |
+            Rendered by <a href="https://gohugo.io" title="Hugo">Hugo</a> |
+            <a href="/index.xml">Subscribe </a></h6>
+    </footer>
+</div>
+<script src="/js/scripts.js"></script>
+
+</body>
+
+</html>
+

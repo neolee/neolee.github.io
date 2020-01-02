@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <url>
+    <loc>/posts/</loc>
+    <lastmod>2013-04-01T23:45:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/clojure-toolchain-reloaded/</loc>
+    <lastmod>2013-04-01T23:45:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/</loc>
+    <lastmod>2013-04-01T23:45:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/programming/</loc>
+    <lastmod>2013-04-01T23:45:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/</loc>
+    <lastmod>2013-04-01T23:45:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/apple/</loc>
+    <lastmod>2013-01-29T23:55:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/ios-7/</loc>
+    <lastmod>2013-01-29T23:55:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/a-brief-guide-of-soa-p3/</loc>
+    <lastmod>2012-10-18T15:47:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/architecture/</loc>
+    <lastmod>2012-10-18T15:47:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/a-brief-guide-of-soa-p2/</loc>
+    <lastmod>2012-10-17T20:53:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/europe-summer-2012-and-500px/</loc>
+    <lastmod>2012-09-18T14:18:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/photography/</loc>
+    <lastmod>2012-09-18T14:18:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/wanted-image-website-tool-not-suck/</loc>
+    <lastmod>2012-05-01T12:28:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/a-brief-guide-of-soa-p1/</loc>
+    <lastmod>2012-04-27T16:53:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/product/</loc>
+    <lastmod>2012-03-31T16:56:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/soul-link/</loc>
+    <lastmod>2012-03-31T16:56:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/go-for-android/</loc>
+    <lastmod>2012-02-05T19:42:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/introducing-restkit/</loc>
+    <lastmod>2012-01-31T18:59:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/back-end-is-hard/</loc>
+    <lastmod>2011-12-24T20:07:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/7-inch-success/</loc>
+    <lastmod>2011-12-03T16:59:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/gadget/</loc>
+    <lastmod>2011-12-03T16:59:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/categories/</loc>
+  </url>
+  
+</urlset>

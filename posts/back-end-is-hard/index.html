@@ -1,0 +1,162 @@
+<!doctype html>
+
+<html lang="en-us">
+
+<head>
+  <title>Back-end is Hard | Paradigm X</title>
+  <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="The HTML5 Herald" />
+<meta name="author" content="Neo Lee" /><meta property="og:title" content="Back-end is Hard" />
+<meta property="og:description" content="Some of of my colleagues are talking about the difficulties of web front-end developing: the browser compatibility, the infuriatingly awful JavaScript language, the pain when glueing DOM, CSS and JavaScript, and so on.
+I agree that all these are a pain in the ass. But they are NOTHING compared to back-end architecture. During my over 10 years career as a software architect, I’ve seen significant improvements in nearly every parts of back-end architecture but it’s still very hard. The fundamental difficulties are still there, nearly unchanged all the time. Let me list some of the major ones." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/posts/back-end-is-hard/" />
+<meta property="article:published_time" content="2011-12-24T20:07:00+08:00" />
+<meta property="article:modified_time" content="2011-12-24T20:07:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Back-end is Hard"/>
+<meta name="twitter:description" content="Some of of my colleagues are talking about the difficulties of web front-end developing: the browser compatibility, the infuriatingly awful JavaScript language, the pain when glueing DOM, CSS and JavaScript, and so on.
+I agree that all these are a pain in the ass. But they are NOTHING compared to back-end architecture. During my over 10 years career as a software architect, I’ve seen significant improvements in nearly every parts of back-end architecture but it’s still very hard. The fundamental difficulties are still there, nearly unchanged all the time. Let me list some of the major ones."/>
+
+<meta name="generator" content="Hugo 0.62.1" />
+    
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha256-l85OmPOjvil/SOvVt3HnSSjzF1TUMyT9eV0c2BzEGzU=" crossorigin="anonymous" />
+  <link rel="stylesheet" href="/fontawesome/css/all.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab|Ruda" />
+  <link rel="stylesheet" type="text/css" href="/css/styles.css" /><link rel='stylesheet' href='/css/main.css'></head>
+
+<body>
+  <div id="container">
+    <header>
+      <h1>
+                <a href="/">Paradigm X</a>
+            </h1>
+
+      <ul id="social-media">
+             <li>
+               <a href="https://github.com/neolee" title="GitHub">
+               <i class="fab fa-github fa-lg"></i>
+               </a>
+             </li>
+             <li>
+               <a href="https://twitter.com/soulhacker" title="Twitter">
+               <i class="fab fa-twitter fa-lg"></i>
+               </a>
+             </li>
+      </ul>
+      
+      <p><em>Vision quests of a soulhacker</em></p>
+      
+    </header>
+
+    
+<nav>
+    <ul>
+        
+        <li>
+            <a class="" href="/tags">
+                <i class="fa-li fa  fa-lg"></i><span>Tags</span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="" href="/posts/">
+                <i class="fa-li fa  fa-lg"></i><span>All Posts</span>
+            </a>
+        </li>
+        
+    </ul>
+</nav>
+
+    <main>
+
+
+
+
+<article>
+
+    <h1>Back-end is Hard</h1>
+
+    
+    <aside>
+    <ul>
+        <li>
+            <time class="post-date" datetime="2011-12-24T20:07:00&#43;08:00">Dec 24, 2011</time>
+        </li>
+        
+
+        
+        <li>
+            <em>
+                
+                    
+                    <a href="/tags/architecture">#Architecture</a>
+                
+            </em>
+        </li>
+        
+
+        <li>3 minutes read</li>
+    </ul>
+</aside>
+
+    
+
+    
+
+    <p>Some of of my colleagues are talking about the difficulties of web front-end developing: the <a href="http://browsershots.org/">browser compatibility</a>, the <a href="https://twitter.com/soulhacker/status/145344139251286016">infuriatingly awful JavaScript language</a>, the pain when glueing DOM, CSS and JavaScript, and so on.</p>
+<p>I agree that all these are a pain in the ass. But they are NOTHING compared to back-end architecture. During my over 10 years career as a software architect, I’ve seen significant improvements in nearly every parts of back-end architecture but it’s still very hard. The fundamental difficulties are still there, nearly unchanged all the time. Let me list some of the major ones.</p>
+<ol>
+<li>
+<p><strong>Design for failure.</strong> Nearly half of the back-end code are not for ‘common’ situation. They are <a href="http://www.usenix.org/event/lisa07/tech/full_papers/hamilton/hamilton_html/">designed for failures</a>. They are designed for letting the system provide acceptable response under special or extreme conditions (and within specific budget): too many concurrent requests, the memory runs out, a new node is being hot-plugged in to the system, the load balancing device stops working, the long connection breaks every several minutes for no reason, etc. To maintain such functionality the design should contain many compromises: sync or async? Scale out or scale up? Realtime transaction or batch job? etc. All these tradeoffs cannot be determined through any simple rules and must be considered via all aspects of environment and requirements of a dynamic system. It nearly always leads to some kind of mistakes.</p>
+</li>
+<li>
+<p><strong>Architecture is about abstraction.</strong> Why abstract? Because abstract concept/mechanism/pattern/methodology provide far more flexibility and reusability. The progress of abstraction distills the essence of the problem and wrap it as reusable component which can be used to solve similar problems in completely different system/context. Seems beautiful isn’t it? But unfortunately, abstraction is hard. More unfortunately, inappropriate abstraction is incredibly disastrous. And the most unfortunately, we have very few working methodology to do abstraction. Abstraction is a kind of art, remember? Mostly we begin with several general models, walk through a series of key rules and continually test our design for the lifetime of the system. Very experience based. In many cases when we find an architectural mistake it is too late. All we can do is to choose from the options between rebuilding the system from ground up or doing the yucky patchwork until we are exhausted.</p>
+</li>
+<li>
+<p><strong>Architecture IS product.</strong> A software product contains many different point of views. Two of the most important are the end-user point of view and the architecture point of view. The end-user POV is like a black box, described by system input and output, can be (relatively) precisely defined and tested. The architecture POV is from inside the software system, the blueprint of the system as a whole, mainly describes each of every parts of the system and the connections between them. In most cases there is no direct link between these POVs. So those are very different POVs but they belong to the SAME product. They must be kept aligned and consistent. So the architect must deeply understand the soul of the product and the product designer must know the capability and limit of the architecture. Otherwise (i.e. the common situations), either the architecture has to be changed tremendously to meet some normal new product feature request, or after implementing a high cost product feature it appears that this feature can be replaced by another easy one which can bring the end-user nearly the same value and experience.</p>
+</li>
+</ol>
+<p>Well, there are more but that’s enough. I consider all the above are the ‘essential difficulties’ as defined by Frederick Brooks in his epic <a href="http://www.cs.nott.ac.uk/~cah/G51ISS/Documents/NoSilverBullet.html"><em>No Silver Bullet</em></a>, which means no quick solver in the coming future.</p>
+<p><strong>Back-end is hard. Q.E.D.</strong></p>
+
+</article>
+
+
+<section class="post-nav">
+    <ul>
+        
+        <li>
+            <a href="/posts/7-inch-success/"><i class="fa fa-chevron-circle-left"></i> 7-inch Success</a>
+        </li>
+        
+        
+        <li>
+            <a href="/posts/introducing-restkit/">Introducing RestKit <i class="fa fa-chevron-circle-right"></i> </a>
+        </li>
+        
+    </ul>
+</section>
+    
+    
+
+
+
+
+
+</main>
+    <footer>
+        <h6>Copyright © 2020 - Neo Lee |
+            Rendered by <a href="https://gohugo.io" title="Hugo">Hugo</a> |
+            <a href="/index.xml">Subscribe </a></h6>
+    </footer>
+</div>
+<script src="/js/scripts.js"></script>
+
+</body>
+
+</html>
+

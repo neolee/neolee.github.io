@@ -1,0 +1,64 @@
+#container > * {
+    width: 1200px;
+    margin: 0 auto;
+}
+
+@media only screen and (max-width: 1280px) {
+    #container > * {
+        width: auto;
+        margin: 0 1.2em;
+    }
+}
+
+a {
+    text-decoration: none;
+}
+
+@media (prefers-color-scheme: dark) {
+    a {
+        color: #00DDDD;
+    }
+    blockquote {
+        background-color: #232323;
+        box-shadow: 0 -1px 0 #444444 inset;
+        border-left: solid 0.1em #353535;
+    }
+    table thead {
+        background-color: #686868;
+    }
+    #container main article p code {
+        background-color: #662222;
+    }
+    .mid-image, figure.mid img {
+        box-shadow: 0 3px 3px #444444;
+    }
+}
+  
+@media (prefers-color-scheme: light) {
+    a {
+        color: #006666;
+    }
+}
+
+#container main article div.highlight > pre {
+    overflow-x: auto;
+    padding: 0.5em 0.5em;
+}
+
+figure.floatright {
+    max-width: 240px;
+    height: auto;
+    float: right;
+    margin: 0.7rem;
+}
+
+figure.floatleft {
+    max-width: 240px;
+    height: auto;
+    float: left;
+    margin: 0.7rem;
+}
+
+figure.mid > figcaption {
+    text-align: center;
+}
