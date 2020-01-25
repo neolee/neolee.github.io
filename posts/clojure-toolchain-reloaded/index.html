@@ -18,7 +18,7 @@
 <meta name="twitter:title" content="Clojure Toolchain Reloaded"/>
 <meta name="twitter:description" content="Clojure keeps growning up, and my 2.5-years old guide for setting up Clojure environment on Mac OS X had been out-of-date for quite a while. The toolchains based on Leiningen 2 and nREPL rise from underground, become really powerful and easy (even joyful for most of us) to use, and de facto standard. Nearly all main stream developing environments provide solutions for serious Clojure developers: Eclipse &#43; Counter Clockwise, IntelliJ IDEA &#43; La Clojure, Sublime Text 2 &#43; SublimeREPL, Vim with fireplace.vim, etc.1, and the favorite I finally found several months ago, Emacs Live."/>
 
-<meta name="generator" content="Hugo 0.62.1" />
+<meta name="generator" content="Hugo 0.63.1" />
     
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha256-l85OmPOjvil/SOvVt3HnSSjzF1TUMyT9eV0c2BzEGzU=" crossorigin="anonymous" />
@@ -137,7 +137,7 @@
         </figcaption>
 </figure>
 
-<p><em>Emacs Live</em> also provides modular customization mechanism called <em>packs</em>. As you can see in the above screenshot, I don't like the font and color theme bundled with Emacs Live so I use my favorite <a href="http://www.fsd.it/fonts/pragmatapro.htm">Pragmata Pro coding font</a> and <a href="http://ethanschoonover.com/solarized">Solarized color theme</a>. For people who like a really powerful yet beautiful and elegant developing environment for Clojure, I'll describe below how I set up all on Mac OS X in half an hour, step by step.</p>
+<p><em>Emacs Live</em> also provides modular customization mechanism called <em>packs</em>. As you can see in the above screenshot, I don&rsquo;t like the font and color theme bundled with Emacs Live so I use my favorite <a href="http://www.fsd.it/fonts/pragmatapro.htm">Pragmata Pro coding font</a> and <a href="http://ethanschoonover.com/solarized">Solarized color theme</a>. For people who like a really powerful yet beautiful and elegant developing environment for Clojure, I&rsquo;ll describe below how I set up all on Mac OS X in half an hour, step by step.</p>
 <h2 id="pre-requisites">Pre-requisites</h2>
 <p><strong>OS</strong>: Mac OS X 10.6 or above<br>
 <strong>Java VM</strong>: Java SDK 6 or later</p>
@@ -151,7 +151,7 @@ Java HotSpot<span style="color:#f92672">(</span>TM<span style="color:#f92672">)<
 <p><em>Emacs Live</em> needs vanilla Emacs 24 or above. Which you can get in one of these methods:</p>
 <ul>
 <li>Download pre-built universal binary from <a href="http://emacsformacosx.com">emacsformacosx.com</a>, mount the image and copy Emacs.app to <code>/Applications</code>.</li>
-<li>Use <a href="http://mxcl.github.com/homebrew/">Homebrew</a>, the best package manager for OS X. It's as simple as <code>brew install emacs --cocoa</code>.</li>
+<li>Use <a href="http://mxcl.github.com/homebrew/">Homebrew</a>, the best package manager for OS X. It&rsquo;s as simple as <code>brew install emacs --cocoa</code>.</li>
 <li>Download source from GNU Emacs site and build it:</li>
 </ul>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">bzr branch http://bzr.savannah.gnu.org/r/emacs/trunk
@@ -180,13 +180,13 @@ mv ~/.emacs ~/.emacs.d ~/Desktop/Emacs.backup
 <p>There are several methods to install <em>Emacs Live</em>. But here is my favorite:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">cd ~/
 git clone git://github.com/overtone/emacs-live.git ~/.emacs.d
-</code></pre></div><p>That's it. Now you can try it by simply launching <code>Emacs.app</code> from your <code>/Applications</code> folder. You'd better not touch the <code>~/.emacs.d</code> folder from now on, so you can update <em>Emacs Live</em> anytime you want by issuing <code>git pull</code> in this folder.</p>
+</code></pre></div><p>That&rsquo;s it. Now you can try it by simply launching <code>Emacs.app</code> from your <code>/Applications</code> folder. You&rsquo;d better not touch the <code>~/.emacs.d</code> folder from now on, so you can update <em>Emacs Live</em> anytime you want by issuing <code>git pull</code> in this folder.</p>
 <p>All following steps are for more customization, and <em>optional</em>.</p>
 <h2 id="emacs-live-customization">Emacs Live Customization</h2>
 <h3 id="create-custom-user-pack">Create Custom User Pack</h3>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">mkdir ~/.live-packs
 cp -R ~/.emacs.d/packs/template/user-template-pack ~/.live-packs/yourname-pack
-</code></pre></div><p>The folder name <code>yourname-pack</code> can be anything you'd like. Mine is <code>neo-pack</code> and you can have it as reference on <a href="https://github.com/neolee/neo-pack">GitHub</a>.</p>
+</code></pre></div><p>The folder name <code>yourname-pack</code> can be anything you&rsquo;d like. Mine is <code>neo-pack</code> and you can have it as reference on <a href="https://github.com/neolee/neo-pack">GitHub</a>.</p>
 <h3 id="user-pack-structure">User Pack Structure</h3>
 <ul>
 <li><code>config</code>: Folder for Emacs config files. Typically a <code>bindings.el</code> for keybindings (which is already there), and a <code>yourname-conf.el</code> for your custom setting (which is not exist by default). I created a <code>config/neo-conf.el</code> and imported most of my settings from the old <code>~/.emacs</code> file, which you can find <a href="https://github.com/neolee/neo-pack/blob/master/config/neo-conf.el">here</a>.</li>
@@ -254,7 +254,7 @@ A: Modify <code>default-frame-alist</code> in <code>conf/yourname-conf.el</code>
 A: Modify <code>default-frame-alist</code> in <code>conf/yourname-conf.el</code> under your user pack:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-clojure" data-lang="clojure">(<span style="color:#a6e22e">add-to-list</span> <span style="color:#e6db74">&#39;default-frame-alist</span> <span style="color:#f92672">&#39;</span>(<span style="color:#a6e22e">cursor-color</span> <span style="color:#66d9ef">. </span><span style="color:#e6db74">&#34;palegoldenrod&#34;</span>))
 </code></pre></div><p><strong>Q: I want the highlight current line feature back!</strong><br>
-A: After disabling the built-in <code>live/colour-pack</code> (see the first question above) you will lose the <em>highlight current line</em> feature as a side effect (since it's defined in that pack). But it's very easy to add it back, by adding the following line to <code>conf/yourname-conf.el</code> under your user pack:</p>
+A: After disabling the built-in <code>live/colour-pack</code> (see the first question above) you will lose the <em>highlight current line</em> feature as a side effect (since it&rsquo;s defined in that pack). But it&rsquo;s very easy to add it back, by adding the following line to <code>conf/yourname-conf.el</code> under your user pack:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-clojure" data-lang="clojure">(<span style="color:#a6e22e">global-hl-line-mode</span> <span style="color:#ae81ff">1</span>)
 </code></pre></div><section class="footnotes" role="doc-endnotes">
 <hr>

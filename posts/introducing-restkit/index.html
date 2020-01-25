@@ -24,7 +24,7 @@ It combines a clean, simple HTTP request/response API with a powerful object map
 It combines a clean, simple HTTP request/response API with a powerful object mapping system that reduces the amount of code you need to write to get stuff done.
 "/>
 
-<meta name="generator" content="Hugo 0.62.1" />
+<meta name="generator" content="Hugo 0.63.1" />
     
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha256-l85OmPOjvil/SOvVt3HnSSjzF1TUMyT9eV0c2BzEGzU=" crossorigin="anonymous" />
@@ -123,13 +123,13 @@ It combines a clean, simple HTTP request/response API with a powerful object map
 </blockquote>
 <p>RestKit provides several components:</p>
 <ol>
-<li><strong>An HTTP client component</strong> based on <code>NSURLConnection</code>. It's not as feature-packed as ASIHTTPRequest<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>, but it does its part very well in most cases. It supports <code>GET</code> <code>POST</code> <code>PUT</code> <code>DELETE</code>, <code>SSL</code> &amp; <code>HTTP AUTH</code>, multi-part, etc. It even provides a request queue to manage the HTTP requests(mostly implicitly), making them more memory and bandwidth efficient.</li>
+<li><strong>An HTTP client component</strong> based on <code>NSURLConnection</code>. It&rsquo;s not as feature-packed as ASIHTTPRequest<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>, but it does its part very well in most cases. It supports <code>GET</code> <code>POST</code> <code>PUT</code> <code>DELETE</code>, <code>SSL</code> &amp; <code>HTTP AUTH</code>, multi-part, etc. It even provides a request queue to manage the HTTP requests(mostly implicitly), making them more memory and bandwidth efficient.</li>
 <li><strong>A powerful but elegant object mapping system</strong>, which uses idiomatic key-value coding mechanism to define and implement the round-trip transformation between <code>JSON</code><sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup> string and native Objective-C class. Well, the magic behind it is called <a href="https://github.com/jverkoey/sockit">SOCKit</a><sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup>.</li>
-<li><strong>A persistent layer</strong> built on top of the object mapping system, fully integrated with CoreData. Can be used as app's primary data storage or just local cache.</li>
+<li><strong>A persistent layer</strong> built on top of the object mapping system, fully integrated with CoreData. Can be used as app&rsquo;s primary data storage or just local cache.</li>
 <li><strong>Miscellaneous helpers</strong> for better life. Reachability, database seeding, API environments switching, etc.</li>
 </ol>
 <p>Other than making another almighty monster its creators focus on the remote-local object (can be transient or persistent through CoreData) mapping. They made it through the &lsquo;<em>common things simple, others possible</em>&rsquo; philosophy, which I always love.</p>
-<p>RestKit has some <a href="https://github.com/RestKit/RestKit/wiki">documentations</a> but not very well organized. Maybe it's the biggest problem for beginners. So I'd like to list below some most useful solution recipes I've used in real world project, updated progressively.</p>
+<p>RestKit has some <a href="https://github.com/RestKit/RestKit/wiki">documentations</a> but not very well organized. Maybe it&rsquo;s the biggest problem for beginners. So I&rsquo;d like to list below some most useful solution recipes I&rsquo;ve used in real world project, updated progressively.</p>
 <p><strong><em><strong>WARNING</strong></em></strong>: it will be incredibly long anyway.</p>
 <h2 id="setting-up">Setting up</h2>
 <p>RestKit provides two ways to set up the RestKit client: <code>RKClient</code> and <code>RKObjectManager</code>. If you want to manually handle the return data you should use <code>RKClient</code>. Otherwise, if you want to use the RestKit object mapping system, then <code>RKObjectManager</code> is the one.</p>
@@ -182,9 +182,9 @@ NSLog(<span style="color:#e6db74">@&#34;</span><span style="color:#e6db74">I am 
         }
     }
 }
-</code></pre></div><p>By using <code>RKObjectManager</code> you'll map the web resources to local Objective-C objects, so you need not (and cannot) handle the return data explicitly. Instead you should handle data through the mapping system, which will be discussed below.</p>
+</code></pre></div><p>By using <code>RKObjectManager</code> you&rsquo;ll map the web resources to local Objective-C objects, so you need not (and cannot) handle the return data explicitly. Instead you should handle data through the mapping system, which will be discussed below.</p>
 <h2 id="modeling-and-mapping">Modeling and Mapping</h2>
-<p>Now the object mapping system. Let's start with the best practice in RESTful API backed mobile app development:</p>
+<p>Now the object mapping system. Let&rsquo;s start with the best practice in RESTful API backed mobile app development:</p>
 <blockquote>
 <ol>
 <li>Analyze the business and make abstraction.</li>
@@ -205,7 +205,7 @@ NSLog(<span style="color:#e6db74">@&#34;</span><span style="color:#e6db74">I am 
         }
     }
 }
-</code></pre></div><p>It's simple but not trivial, and very <em>representative</em>. What will the mapping work? Have a look at the code first:</p>
+</code></pre></div><p>It&rsquo;s simple but not trivial, and very <em>representative</em>. What will the mapping work? Have a look at the code first:</p>
 <div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
 <table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
 <pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
@@ -372,14 +372,14 @@ NSLog(<span style="color:#e6db74">@&#34;</span><span style="color:#e6db74">I am 
 }
 </code></pre></td></tr></table>
 </div>
-</div><p><strong>Line 1-35</strong>. Firstly we defined all needed model classes: fundamental ones first, ones that contain them next. Just follow the nature of the data structure within the API's response data.<br>
-<strong>Line 51-56</strong>. Use instances of <code>RKObjectMapping</code> class to define object mappings. Simple mappings are self explained. Note that <code>RKObjectMapping</code> provides several different <code>mapXXX</code> methods to suit different use cases. The key path in mapping definition fully follows Cocoa's key path style (also support <a href="http://developer.apple.com/library/ios/#documentation/cocoa/conceptual/KeyValueCoding/Articles/CollectionOperators.html">collection operators</a>). Check <a href="http://restkit.org/api/master/Classes/RKObjectManager.html">its document</a> and Apple's <a href="http://developer.apple.com/library/ios/#documentation/cocoa/conceptual/KeyValueCoding/Articles/KeyValueCoding.html">Key Value Coding Guide</a> for detail.<br>
+</div><p><strong>Line 1-35</strong>. Firstly we defined all needed model classes: fundamental ones first, ones that contain them next. Just follow the nature of the data structure within the API&rsquo;s response data.<br>
+<strong>Line 51-56</strong>. Use instances of <code>RKObjectMapping</code> class to define object mappings. Simple mappings are self explained. Note that <code>RKObjectMapping</code> provides several different <code>mapXXX</code> methods to suit different use cases. The key path in mapping definition fully follows Cocoa&rsquo;s key path style (also support <a href="http://developer.apple.com/library/ios/#documentation/cocoa/conceptual/KeyValueCoding/Articles/CollectionOperators.html">collection operators</a>). Check <a href="http://restkit.org/api/master/Classes/RKObjectManager.html">its document</a> and Apple&rsquo;s <a href="http://developer.apple.com/library/ios/#documentation/cocoa/conceptual/KeyValueCoding/Articles/KeyValueCoding.html">Key Value Coding Guide</a> for detail.<br>
 <strong>Line 58-61</strong>. Complex object mappings are defined by <code>mapKeyPath:toRelationship:withMapping:</code> or similar methods. They map some key path to pre-defined object mappings. As seen in the code, the mapping to class <code>UsersLogin</code> contains simple mapping (<em>line 59</em>) and relationship mappings (<em>line 60-61</em>).<br>
 <strong>Line 64-67</strong>. <code>RKObjectManager</code> provides <code>loadObjectsAtResourcePath:objectMapping:delegate:</code> method to do these steps in order: combine resource path with the global <code>BaseURL</code> (configured within the <code>RKObjectManager</code> singleton), load resource from web services, parse return data, transform to local objects according to pre-defined <code>RKObjectMapping</code> instance, at last call the delegate to handle result.<br>
 <strong>Line 72-80</strong>. Delegate methods <code>didLoadObjects</code> and <code>didFailWithError</code> (<em>required</em>) are called after the object mapping process. Normally fetch the result object and do whatever you want.</p>
 <h2 id="routing">Routing</h2>
 <p>The previous code list is neat except one part. Note <strong>line 64-66</strong>, in which we hard-code the API endpoint and parameters. In our <code>login</code> scenario it may not be a big problem, but for highly reused objects, repeatedly constructing <code>GET</code> <code>POST</code> <code>PUT</code> <code>DELETE</code> URLs by hand could be real pain in the ass. How about more object-oriented and more elegant way, just like the <a href="http://guides.rubyonrails.org/routing.html">routing system in Ruby on Rails</a>?</p>
-<p>RestKit is most suitable for developers who has RoR background because of its <strong>Routing</strong> system which is highly alike to RoR's, but built on Cocoa's idiomatic key-value coding way. Here is the code sample:</p>
+<p>RestKit is most suitable for developers who has RoR background because of its <strong>Routing</strong> system which is highly alike to RoR&rsquo;s, but built on Cocoa&rsquo;s idiomatic key-value coding way. Here is the code sample:</p>
 <div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
 <table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
 <pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
@@ -414,14 +414,14 @@ sb2nuke.<span style="color:#66d9ef">id</span> <span style="color:#f92672">=</spa
 [[RKObjectManager sharedManager] deleteObject:sb2nuke delegate:self];
 </code></pre></td></tr></table>
 </div>
-</div><p><strong>Line 4</strong> set the <em>default</em> route of <code>User</code> class, which means when you call object manager's <code>getObject</code> <code>postObject</code> <code>putObject</code> <code>deleteObject</code> methods the requests will go to <code>@&quot;/users/:id&quot;</code>. This is a colon coded endpoint and what is after the colon is the name of a <em>method</em> in the route class, whose return value will replace the colon part.<br>
+</div><p><strong>Line 4</strong> set the <em>default</em> route of <code>User</code> class, which means when you call object manager&rsquo;s <code>getObject</code> <code>postObject</code> <code>putObject</code> <code>deleteObject</code> methods the requests will go to <code>@&quot;/users/:id&quot;</code>. This is a colon coded endpoint and what is after the colon is the name of a <em>method</em> in the route class, whose return value will replace the colon part.<br>
 <strong>Line 5</strong> set a special route for <code>postObject</code> method, which will override the setting in default route.<br>
 <strong>Line 10</strong> requests <code>@&quot;/users&quot;</code> with HTTP <code>POST</code> method and RestKit will transform <code>me</code> object into post data form as the way defined in object mapper of class User.<br>
 <strong>Line 14</strong> first call <code>[sb2nuke id]</code> method to get the value and replace <code>:id</code> with it, then requests <code>@&quot;/users/13&quot;</code> with HTTP <code>DELETE</code> method, which (should) remove the user object with id 13 from the server.</p>
-<p>So you see, RestKit provides very flexible tools for RESTful web services integration: you can use the network layer and do all data mapping by hand, or you can use the object mapping to do it completely within local object system, or you can tuning it in some intermediate way. No matter which solution you choose remember to align the protocol between the server and client side, and don't forget to verify them to the Android platform if necessary (there is no RestKit over there for now -_-).</p>
-<p>Thus we've completed the first part of this introduction guide. Below we will discuss some facilities bundled in RestKit to make our life better.</p>
+<p>So you see, RestKit provides very flexible tools for RESTful web services integration: you can use the network layer and do all data mapping by hand, or you can use the object mapping to do it completely within local object system, or you can tuning it in some intermediate way. No matter which solution you choose remember to align the protocol between the server and client side, and don&rsquo;t forget to verify them to the Android platform if necessary (there is no RestKit over there for now -_-).</p>
+<p>Thus we&rsquo;ve completed the first part of this introduction guide. Below we will discuss some facilities bundled in RestKit to make our life better.</p>
 <h2 id="the-request-queue">The Request Queue</h2>
-<p>Request queue is the most important support player under the hood. <code>RKRequestQueue</code> is behind nearly all network access within RestKit and provides elegant solution for critical memory and bandwidth problems. <code>RKRequestQueue</code> wraps memory management within RestKit framework so you'll never see any <code>retain</code> <code>release</code> <code>autorelease</code> for <code>RKRequest</code> <code>RKResponse</code> instances. It let us developers focus on the business with very little concern about the memory management.</p>
+<p>Request queue is the most important support player under the hood. <code>RKRequestQueue</code> is behind nearly all network access within RestKit and provides elegant solution for critical memory and bandwidth problems. <code>RKRequestQueue</code> wraps memory management within RestKit framework so you&rsquo;ll never see any <code>retain</code> <code>release</code> <code>autorelease</code> for <code>RKRequest</code> <code>RKResponse</code> instances. It let us developers focus on the business with very little concern about the memory management.</p>
 <p><code>RKRequestQueue</code> also provides seamless integration with Reachability API (in iOS System Configuration framework), pooling all requests when network is unavailable, and limiting concurrent requests when network becomes reachable to prevent overburden as well.</p>
 <p>All the amazing features described above are working without knowing, and maybe the only visible part of <code>RKRequestQueue</code> is its <em>request lifecycle management</em> feature, by which you can cancel ongoing requests to prevent wasting the bandwidth. This is a common situation in mobile apps that when some user action generates a bunch of network requests and the following action actually makes those requests useless (e.g. the view for previous action is dismissed by the later action). By using <code>RKRequestQueue</code> we can do it very easily by its <code>cancelRequest:</code> <code>cancelRequestsWithDelegate:</code> and  cancelAllRequests:` methods. And remember that whether and when to call them is fully determined by developers so you can choose the strategy wisely according to the different scenarios. Here is the simplest sample:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-objc" data-lang="objc">- (<span style="color:#66d9ef">void</span>)<span style="color:#a6e22e">viewWillAppear:</span>(<span style="color:#66d9ef">BOOL</span>)animated {
@@ -431,8 +431,8 @@ sb2nuke.<span style="color:#66d9ef">id</span> <span style="color:#f92672">=</spa
 - (<span style="color:#66d9ef">void</span>)<span style="color:#a6e22e">viewWillDisappear:</span>(<span style="color:#66d9ef">BOOL</span>)animated {
     [[RKRequestQueue sharedQueue] cancelRequestsWithDelegate:self];
 }
-</code></pre></div><p>The <code>cancelRequestsWithDelegate:</code> method cancel all requests that current controller is delegate for. If there are no one processing it'll do nothing.</p>
-<p>The last but not least. What <code>[RKRequestQueue sharedQueue]</code> returns is the default queue which created automatically when the RestKit client initialized. In most real world apps it's not enough. For example we may need a queue to handle special resource intensive tasks in a background thread, such as data uploading/downloading, while the default queue keep working for  responding user actions. It's easy:</p>
+</code></pre></div><p>The <code>cancelRequestsWithDelegate:</code> method cancel all requests that current controller is delegate for. If there are no one processing it&rsquo;ll do nothing.</p>
+<p>The last but not least. What <code>[RKRequestQueue sharedQueue]</code> returns is the default queue which created automatically when the RestKit client initialized. In most real world apps it&rsquo;s not enough. For example we may need a queue to handle special resource intensive tasks in a background thread, such as data uploading/downloading, while the default queue keep working for  responding user actions. It&rsquo;s easy:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-objc" data-lang="objc">RKRequestQueue<span style="color:#f92672">*</span> queue <span style="color:#f92672">=</span> [[RKRequestQueue alloc] init];
 queue.delegate <span style="color:#f92672">=</span> self;
 queue.concurrentRequestsLimit <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;
@@ -504,7 +504,7 @@ NSLog(<span style="color:#e6db74">@&#34;</span><span style="color:#e6db74">Conte
 <span style="color:#75715e">// Send a Request!
 </span><span style="color:#75715e"></span>[[RKClient sharedClient] post:<span style="color:#e6db74">@&#34;</span><span style="color:#e6db74">/upload</span><span style="color:#e6db74">&#34;</span> params:params delegate:self];
 </code></pre></div><h2 id="background-uploaddownload">Background Upload/Download</h2>
-<p>iOS supported multi-tasking since 4.0 but it's a highly restricted support and there are so many misconceptions among the users and even developers. I would strongly suggest Fraser Speirs&rsquo; <a href="http://speirs.org/blog/2012/1/2/misconceptions-about-ios-multitasking.html">excellent blog</a> which explains all about iOS multi-tasking.</p>
+<p>iOS supported multi-tasking since 4.0 but it&rsquo;s a highly restricted support and there are so many misconceptions among the users and even developers. I would strongly suggest Fraser Speirs&rsquo; <a href="http://speirs.org/blog/2012/1/2/misconceptions-about-ios-multitasking.html">excellent blog</a> which explains all about iOS multi-tasking.</p>
 <p>RestKit can seamlessly facilitate multi-tasking to prevent important long-time requests being interrupted by user switching out of the app. The key is the <code>backgroundPolicy</code> property of <code>RKRequest</code> which can be one of 4 enum values:</p>
 <ul>
 <li><code>RKRequestBackgroundPolicyNone</code>: the default value, do nothing for backgrounding;</li>
@@ -531,10 +531,10 @@ request.backgroundPolicy <span style="color:#f92672">=</span> RKRequestBackgroun
 <p>In fact ASIHTTPRequest has been <a href="http://allseeing-i.com/%5Brequest_release%5D">abandoned</a> since September 2011, and RestKit is one of replacements its author suggested. <a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:2" role="doc-endnote">
-<p>The JSON parsing layer is pluggable, default to <a href="https://github.com/johnezang/JSONKit">JSONKit</a>. And I haven't mentioned the <em>old</em> XML, have I? <a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<p>The JSON parsing layer is pluggable, default to <a href="https://github.com/johnezang/JSONKit">JSONKit</a>. And I haven&rsquo;t mentioned the <em>old</em> XML, have I? <a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:3" role="doc-endnote">
-<p>Created by <a href="mailto:jverkoey@gmail.com">Jeff Verkoeyen</a>, the author of <a href="https://github.com/jverkoey/nimbus">Nimbus</a>, the highly improved successor of Facebook's Three20. <a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<p>Created by <a href="mailto:jverkoey@gmail.com">Jeff Verkoeyen</a>, the author of <a href="https://github.com/jverkoey/nimbus">Nimbus</a>, the highly improved successor of Facebook&rsquo;s Three20. <a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 </ol>
 </section>

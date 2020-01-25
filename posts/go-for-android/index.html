@@ -11,7 +11,7 @@
 <meta property="og:description" content="Go is the language from Google and Android is the mobile OS from Google. The bond between them are just born with. So there should be no surprise that we can use Go to write Android programs, though some important restricts for now:
 
 There is no Android SDK for Go, so no system API nor GUI for Go program on Android.
-Go doesn&#39;t support JNI for now. So Go programs have to be compiled as separate executables, wrapped as assets in apk and called within Java based apps.
+Go doesn&rsquo;t support JNI for now. So Go programs have to be compiled as separate executables, wrapped as assets in apk and called within Java based apps.
 Maybe cross-compiling is really hard. We cannot build Android applications which use Cgo(C bridge for Go) on our desktop computer for now, as shown below.
 " />
 <meta property="og:type" content="article" />
@@ -24,11 +24,11 @@ Maybe cross-compiling is really hard. We cannot build Android applications which
 <meta name="twitter:description" content="Go is the language from Google and Android is the mobile OS from Google. The bond between them are just born with. So there should be no surprise that we can use Go to write Android programs, though some important restricts for now:
 
 There is no Android SDK for Go, so no system API nor GUI for Go program on Android.
-Go doesn&#39;t support JNI for now. So Go programs have to be compiled as separate executables, wrapped as assets in apk and called within Java based apps.
+Go doesn&rsquo;t support JNI for now. So Go programs have to be compiled as separate executables, wrapped as assets in apk and called within Java based apps.
 Maybe cross-compiling is really hard. We cannot build Android applications which use Cgo(C bridge for Go) on our desktop computer for now, as shown below.
 "/>
 
-<meta name="generator" content="Hugo 0.62.1" />
+<meta name="generator" content="Hugo 0.63.1" />
     
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha256-l85OmPOjvil/SOvVt3HnSSjzF1TUMyT9eV0c2BzEGzU=" crossorigin="anonymous" />
@@ -124,16 +124,16 @@ Maybe cross-compiling is really hard. We cannot build Android applications which
     <p><a href="http://golang.org/">Go</a> is <em>the</em> language from Google and Android is <em>the</em> mobile OS from Google. The bond between them are just born with. So there should be no surprise that we can use Go to write Android programs, though some important restricts for now:</p>
 <ul>
 <li>There is no Android SDK for Go, so no system API nor GUI for Go program on Android.</li>
-<li>Go doesn't support JNI for now. So Go programs have to be compiled as separate executables, wrapped as assets in apk and called within Java based apps.</li>
+<li>Go doesn&rsquo;t support JNI for now. So Go programs have to be compiled as separate executables, wrapped as assets in apk and called within Java based apps.</li>
 <li>Maybe cross-compiling is really hard. We cannot build Android applications which use Cgo(C bridge for Go) on our desktop computer for now, as shown below.</li>
 </ul>
-<p>But it's not just a toy because of the following advantages:</p>
+<p>But it&rsquo;s not just a toy because of the following advantages:</p>
 <ul>
 <li>Go is <em>fast</em> and all C programmers just like it.</li>
 <li>Go language is bundled with high quality libraries, especially suitable for special tasks.</li>
-<li>Go is from Google! It does have a future! Well, at least let's hope so.</li>
+<li>Go is from Google! It does have a future! Well, at least let&rsquo;s hope so.</li>
 </ul>
-<p>Go is a very young language, thus there's few guides or tutorials out there. But it also makes earlier investion provide more return. My friend and colleague <a href="https://twitter.com/#!/rarnu">@rarnu</a> also likes the idea of writing Android program using Go and has written <a href="http://blog.sina.com.cn/s/blog_68b671430100z4wn.html">a short tutorial</a>. I'd like to rewrite it here and fill all lost details which he was too lazy to include.</p>
+<p>Go is a very young language, thus there&rsquo;s few guides or tutorials out there. But it also makes earlier investion provide more return. My friend and colleague <a href="https://twitter.com/#!/rarnu">@rarnu</a> also likes the idea of writing Android program using Go and has written <a href="http://blog.sina.com.cn/s/blog_68b671430100z4wn.html">a short tutorial</a>. I&rsquo;d like to rewrite it here and fill all lost details which he was too lazy to include.</p>
 <h2 id="prerequisites">Prerequisites</h2>
 <ul>
 <li>C Tools
@@ -165,7 +165,7 @@ export GOARCH<span style="color:#f92672">=</span>arm
 ./all.bash
 </code></pre></div><p>Now check out <code>$GOBIN</code> folder, three commands <code>go</code> <code>godoc</code> <code>gofmt</code>(<code>go</code> command line tools) and a folder <code>linux_arm</code>(cross-compiling tools for Linux/ARM targets) should be in there. <strong>Line 2-5</strong> can be run multiple times by setting different <code>$GOOS</code> and <code>$GOARCH</code> combinations to support <code>amd64</code> <code>386</code> and <code>arm</code> instruction sets all in one install base. See &ldquo;<a href="http://golang.org/doc/install/source">Installing Go from source</a>&rdquo; for detail.</p>
 <h2 id="hello-android-from-go">Hello Android from Go!</h2>
-<p>Now create Go source files for testing. Let's start with the most favorite &lsquo;Hello world!&rsquo; one.</p>
+<p>Now create Go source files for testing. Let&rsquo;s start with the most favorite &lsquo;Hello world!&rsquo; one.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
 
 <span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
@@ -177,9 +177,9 @@ export GOARCH<span style="color:#f92672">=</span>arm
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">adb push hello-arm /data/local/
 adb shell
 /data/local/hello-arm
-</code></pre></div><p>If all things go right it will generate output as expected. Using the same routine showed above, all code examples on <a href="http://golang.org/">Go's homepage</a> can be verified working well on Android devices.</p>
+</code></pre></div><p>If all things go right it will generate output as expected. Using the same routine showed above, all code examples on <a href="http://golang.org/">Go&rsquo;s homepage</a> can be verified working well on Android devices.</p>
 <h2 id="real-world-example">Real World Example</h2>
-<p>The following code example is borrowed from rarnu's <a href="http://blog.sina.com.cn/s/blog_68b671430100z4wn.html">blog post</a> and modified a bit.</p>
+<p>The following code example is borrowed from rarnu&rsquo;s <a href="http://blog.sina.com.cn/s/blog_68b671430100z4wn.html">blog post</a> and modified a bit.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
 
 <span style="color:#f92672">import</span> (<span style="color:#e6db74">&#34;net/http&#34;</span>; <span style="color:#e6db74">&#34;flag&#34;</span>; <span style="color:#e6db74">&#34;os&#34;</span>; <span style="color:#e6db74">&#34;strconv&#34;</span>; <span style="color:#e6db74">&#34;encoding/json&#34;</span>; <span style="color:#e6db74">&#34;io/ioutil&#34;</span>)
@@ -219,7 +219,7 @@ adb shell
 /data/local/cu-arm <span style="color:#ae81ff">20</span>
 </code></pre></div><p>When running it on my Galaxy Nexus (ARM v7 dual-core 1.2 GHz Cortex-A9, Android 4.0.2 with kernel 3.0.8) it crashed on <strong>line 14</strong> - the <code>http.Get</code> call failed. Because of some issues in the cross-compiling system, all calls using Cgo will cause failure like that, at least for now. Unfortunately the <code>net</code> package depend on Cgo and nearly all useful applications need <code>net</code> package.</p>
 <h2 id="call-go-code-in-android-apps">Call Go Code in Android Apps</h2>
-<p>Exactly the same as calling any native executables in Android apps, which fully explained in <a href="http://gimite.net/en/index.php?Run%20native%20executable%20in%20Android%20App">this guide</a>. I'll list a more general and accurate solution below for convenience.</p>
+<p>Exactly the same as calling any native executables in Android apps, which fully explained in <a href="http://gimite.net/en/index.php?Run%20native%20executable%20in%20Android%20App">this guide</a>. I&rsquo;ll list a more general and accurate solution below for convenience.</p>
 <p>The following Java class shows how to invoke a process in Android apps (actually it is used by Google itself), which is the base of the following guide:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">CommandResult</span> <span style="color:#f92672">{</span>
     <span style="color:#66d9ef">public</span> String result <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;</span><span style="color:#f92672">;</span>

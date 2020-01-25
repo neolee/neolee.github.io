@@ -45,14 +45,14 @@ a {
     padding: 0.5em 0.5em;
 }
 
-figure.floatright {
+figure.floatright img {
     max-width: 240px;
     height: auto;
     float: right;
     margin: 0.7rem;
 }
 
-figure.floatleft {
+figure.floatleft img {
     max-width: 240px;
     height: auto;
     float: left;
