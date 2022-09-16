@@ -3,35 +3,40 @@
 <html lang="en-us">
 
 <head>
-  <title>Clojure Toolchain Reloaded | Paradigm X</title>
+  <title>Clojure Toolchain Reloaded - Paradigm X</title>
   <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="description" content="The HTML5 Herald" />
 <meta name="author" content="Neo Lee" /><meta property="og:title" content="Clojure Toolchain Reloaded" />
 <meta property="og:description" content="Clojure keeps growning up, and my 2.5-years old guide for setting up Clojure environment on Mac OS X had been out-of-date for quite a while. The toolchains based on Leiningen 2 and nREPL rise from underground, become really powerful and easy (even joyful for most of us) to use, and de facto standard. Nearly all main stream developing environments provide solutions for serious Clojure developers: Eclipse &#43; Counter Clockwise, IntelliJ IDEA &#43; La Clojure, Sublime Text 2 &#43; SublimeREPL, Vim with fireplace.vim, etc.1, and the favorite I finally found several months ago, Emacs Live." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/posts/clojure-toolchain-reloaded/" />
+<meta property="og:url" content="/posts/clojure-toolchain-reloaded/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2013-04-01T23:45:00+08:00" />
 <meta property="article:modified_time" content="2013-04-01T23:45:00+08:00" />
+
 
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Clojure Toolchain Reloaded"/>
 <meta name="twitter:description" content="Clojure keeps growning up, and my 2.5-years old guide for setting up Clojure environment on Mac OS X had been out-of-date for quite a while. The toolchains based on Leiningen 2 and nREPL rise from underground, become really powerful and easy (even joyful for most of us) to use, and de facto standard. Nearly all main stream developing environments provide solutions for serious Clojure developers: Eclipse &#43; Counter Clockwise, IntelliJ IDEA &#43; La Clojure, Sublime Text 2 &#43; SublimeREPL, Vim with fireplace.vim, etc.1, and the favorite I finally found several months ago, Emacs Live."/>
 
-<meta name="generator" content="Hugo 0.63.1" />
+<meta name="generator" content="Hugo 0.102.3" />
     
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha256-l85OmPOjvil/SOvVt3HnSSjzF1TUMyT9eV0c2BzEGzU=" crossorigin="anonymous" />
   <link rel="stylesheet" href="/fontawesome/css/all.min.css" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab|Ruda" />
+  
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab|Ruda" />
+  
+  
   <link rel="stylesheet" type="text/css" href="/css/styles.css" /><link rel='stylesheet' href='/css/main.css'></head>
 
 <body>
   <div id="container">
     <header>
+      
       <h1>
-                <a href="/">Paradigm X</a>
-            </h1>
+        <a href="/">Paradigm X</a>
+      </h1>
 
       <ul id="social-media">
              <li>
@@ -61,7 +66,7 @@
         </li>
         
         <li>
-            <a class="" href="/posts/">
+            <a class="active" href="/posts/">
                 <i class="fa-li fa  fa-lg"></i><span>All Posts</span>
             </a>
         </li>
@@ -75,6 +80,7 @@
     </ul>
 </nav>
 
+
     <main>
 
 
@@ -85,11 +91,12 @@
     <h1>Clojure Toolchain Reloaded</h1>
 
     
-    <aside>
+      <aside>
     <ul>
         <li>
             <time class="post-date" datetime="2013-04-01T23:45:00&#43;08:00">Apr 1, 2013</time>
         </li>
+        
         
 
         
@@ -103,11 +110,14 @@
         </li>
         
 
-        <li>9 minutes read</li>
+        <li>9 minute read</li>
     </ul>
 </aside>
 
     
+
+    
+      
 
     
 
@@ -131,8 +141,7 @@
 </li>
 <li>Amazing powerful features like: <a href="http://www.emacswiki.org/emacs/UndoTree">undo-tree</a>, Textmate-like snippets, <a href="http://www.emacswiki.org/emacs/quick-jump.el">quick jump</a> and <a href="http://www.emacswiki.org/emacs/AceJump">Ace Jump</a> mode</li>
 </ul>
-<figure class="mid">
-    <img src="/images/posts/emacs-live.png"/> <figcaption>
+<figure class="mid"><img src="/images/posts/emacs-live.png"/><figcaption>
             <h4>My custom Emacs Live in working</h4>
         </figcaption>
 </figure>
@@ -141,26 +150,26 @@
 <h2 id="pre-requisites">Pre-requisites</h2>
 <p><strong>OS</strong>: Mac OS X 10.6 or above<br>
 <strong>Java VM</strong>: Java SDK 6 or later</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">% uname -a
-Darwin matrix.local 12.3.0 Darwin Kernel Version 12.3.0: Sun Jan  <span style="color:#ae81ff">6</span> 22:37:10 PST 2013; root:xnu-2050.22.13~1/RELEASE_X86_64 x86_64
-% java -version
-java version <span style="color:#e6db74">&#34;1.6.0_43&#34;</span>
-Java<span style="color:#f92672">(</span>TM<span style="color:#f92672">)</span> SE Runtime Environment <span style="color:#f92672">(</span>build 1.6.0_43-b01-447-11M4203<span style="color:#f92672">)</span>
-Java HotSpot<span style="color:#f92672">(</span>TM<span style="color:#f92672">)</span> 64-Bit Server VM <span style="color:#f92672">(</span>build 20.14-b01-447, mixed mode<span style="color:#f92672">)</span>
-</code></pre></div><h3 id="emacs">Emacs</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>% uname -a
+</span></span><span style="display:flex;"><span>Darwin matrix.local 12.3.0 Darwin Kernel Version 12.3.0: Sun Jan  <span style="color:#ae81ff">6</span> 22:37:10 PST 2013; root:xnu-2050.22.13~1/RELEASE_X86_64 x86_64
+</span></span><span style="display:flex;"><span>% java -version
+</span></span><span style="display:flex;"><span>java version <span style="color:#e6db74">&#34;1.6.0_43&#34;</span>
+</span></span><span style="display:flex;"><span>Java<span style="color:#f92672">(</span>TM<span style="color:#f92672">)</span> SE Runtime Environment <span style="color:#f92672">(</span>build 1.6.0_43-b01-447-11M4203<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Java HotSpot<span style="color:#f92672">(</span>TM<span style="color:#f92672">)</span> 64-Bit Server VM <span style="color:#f92672">(</span>build 20.14-b01-447, mixed mode<span style="color:#f92672">)</span>
+</span></span></code></pre></div><h3 id="emacs">Emacs</h3>
 <p><em>Emacs Live</em> needs vanilla Emacs 24 or above. Which you can get in one of these methods:</p>
 <ul>
 <li>Download pre-built universal binary from <a href="http://emacsformacosx.com">emacsformacosx.com</a>, mount the image and copy Emacs.app to <code>/Applications</code>.</li>
 <li>Use <a href="http://mxcl.github.com/homebrew/">Homebrew</a>, the best package manager for OS X. It&rsquo;s as simple as <code>brew install emacs --cocoa</code>.</li>
 <li>Download source from GNU Emacs site and build it:</li>
 </ul>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">bzr branch http://bzr.savannah.gnu.org/r/emacs/trunk
-cd trunk
-./autogen.sh
-./configure --with-ns
-make bootstrap <span style="color:#f92672">&amp;&amp;</span> make install
-mv nextstep/Emacs.app /Applications
-</code></pre></div><h3 id="leiningen">Leiningen</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>bzr branch http://bzr.savannah.gnu.org/r/emacs/trunk
+</span></span><span style="display:flex;"><span>cd trunk
+</span></span><span style="display:flex;"><span>./autogen.sh
+</span></span><span style="display:flex;"><span>./configure --with-ns
+</span></span><span style="display:flex;"><span>make bootstrap <span style="color:#f92672">&amp;&amp;</span> make install
+</span></span><span style="display:flex;"><span>mv nextstep/Emacs.app /Applications
+</span></span></code></pre></div><h3 id="leiningen">Leiningen</h3>
 <p><em>Leiningen is for automating Clojure projects without setting your hair on fire.</em></p>
 <p><em>Emacs Live</em> depends on <em>Leiningen 2</em>. The best way to get <a href="https://github.com/technomancy/leiningen">Leiningen</a> on board is, again, to use <a href="http://mxcl.github.com/homebrew/">Homebrew</a> <code>brew install leiningen</code>.</p>
 <p>Of course the <a href="https://github.com/technomancy/leiningen">official method</a> should work fine too:</p>
@@ -170,65 +179,65 @@ mv nextstep/Emacs.app /Applications
 <li>Set it to be executable e.g. <code>chmod 755 ~/bin/lein</code> or <code>chmod 755 /usr/local/bin/lein</code></li>
 </ol>
 <p>Either way you can verify it by issuing<sup id="fnref:4"><a href="#fn:4" class="footnote-ref" role="doc-noteref">4</a></sup>:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">% lein -v
-Leiningen 2.1.2 on Java 1.6.0_43 Java HotSpot<span style="color:#f92672">(</span>TM<span style="color:#f92672">)</span> 64-Bit Server VM
-</code></pre></div><h3 id="cleanup">Cleanup</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>% lein -v
+</span></span><span style="display:flex;"><span>Leiningen 2.1.2 on Java 1.6.0_43 Java HotSpot<span style="color:#f92672">(</span>TM<span style="color:#f92672">)</span> 64-Bit Server VM
+</span></span></code></pre></div><h3 id="cleanup">Cleanup</h3>
 <p>If you are already Emacs user, which means that most likely you already have an <code>.emacs</code> config file and lots of stuff in <code>.emacs.d</code> folder under your home <code>~/</code>. In this case before going any further you have to backup all of them for later use.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">mkdir -p ~/Desktop/Emacs.backup
-mv ~/.emacs ~/.emacs.d ~/Desktop/Emacs.backup
-</code></pre></div><h2 id="emacs-live">Emacs Live</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>mkdir -p ~/Desktop/Emacs.backup
+</span></span><span style="display:flex;"><span>mv ~/.emacs ~/.emacs.d ~/Desktop/Emacs.backup
+</span></span></code></pre></div><h2 id="emacs-live">Emacs Live</h2>
 <p>There are several methods to install <em>Emacs Live</em>. But here is my favorite:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">cd ~/
-git clone git://github.com/overtone/emacs-live.git ~/.emacs.d
-</code></pre></div><p>That&rsquo;s it. Now you can try it by simply launching <code>Emacs.app</code> from your <code>/Applications</code> folder. You&rsquo;d better not touch the <code>~/.emacs.d</code> folder from now on, so you can update <em>Emacs Live</em> anytime you want by issuing <code>git pull</code> in this folder.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cd ~/
+</span></span><span style="display:flex;"><span>git clone git://github.com/overtone/emacs-live.git ~/.emacs.d
+</span></span></code></pre></div><p>That&rsquo;s it. Now you can try it by simply launching <code>Emacs.app</code> from your <code>/Applications</code> folder. You&rsquo;d better not touch the <code>~/.emacs.d</code> folder from now on, so you can update <em>Emacs Live</em> anytime you want by issuing <code>git pull</code> in this folder.</p>
 <p>All following steps are for more customization, and <em>optional</em>.</p>
 <h2 id="emacs-live-customization">Emacs Live Customization</h2>
 <h3 id="create-custom-user-pack">Create Custom User Pack</h3>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">mkdir ~/.live-packs
-cp -R ~/.emacs.d/packs/template/user-template-pack ~/.live-packs/yourname-pack
-</code></pre></div><p>The folder name <code>yourname-pack</code> can be anything you&rsquo;d like. Mine is <code>neo-pack</code> and you can have it as reference on <a href="https://github.com/neolee/neo-pack">GitHub</a>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>mkdir ~/.live-packs
+</span></span><span style="display:flex;"><span>cp -R ~/.emacs.d/packs/template/user-template-pack ~/.live-packs/yourname-pack
+</span></span></code></pre></div><p>The folder name <code>yourname-pack</code> can be anything you&rsquo;d like. Mine is <code>neo-pack</code> and you can have it as reference on <a href="https://github.com/neolee/neo-pack">GitHub</a>.</p>
 <h3 id="user-pack-structure">User Pack Structure</h3>
 <ul>
 <li><code>config</code>: Folder for Emacs config files. Typically a <code>bindings.el</code> for keybindings (which is already there), and a <code>yourname-conf.el</code> for your custom setting (which is not exist by default). I created a <code>config/neo-conf.el</code> and imported most of my settings from the old <code>~/.emacs</code> file, which you can find <a href="https://github.com/neolee/neo-pack/blob/master/config/neo-conf.el">here</a>.</li>
 <li><code>lib</code>: Folder for Emacs mods. Put stuffs from old <code>.emacs.d</code> folder into it and load them like this (in <code>init.el</code> or any scripts under <code>config</code> folder):</li>
 </ul>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-clojure" data-lang="clojure">(<span style="color:#a6e22e">live-add-pack-lib</span> <span style="color:#e6db74">&#34;some-great-mod&#34;</span>) <span style="color:#75715e">; some-great-mod is sub-folder under lib folder</span>
-(<span style="color:#a6e22e">require</span> <span style="color:#e6db74">&#39;great-mod-init</span>)            <span style="color:#75715e">; great-mod-init.el is script under sub-folder some-great-mod</span>
-(<span style="color:#a6e22e">great-mod</span>)                          <span style="color:#75715e">; great-mod is some function in great-mod-init.el</span>
-</code></pre></div><ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-clojure" data-lang="clojure"><span style="display:flex;"><span>(<span style="color:#a6e22e">live-add-pack-lib</span> <span style="color:#e6db74">&#34;some-great-mod&#34;</span>) <span style="color:#75715e">; some-great-mod is sub-folder under lib folder</span>
+</span></span><span style="display:flex;"><span>(<span style="color:#a6e22e">require</span> <span style="color:#e6db74">&#39;great-mod-init</span>)            <span style="color:#75715e">; great-mod-init.el is script under sub-folder some-great-mod</span>
+</span></span><span style="display:flex;"><span>(<span style="color:#a6e22e">great-mod</span>)                          <span style="color:#75715e">; great-mod is some function in great-mod-init.el</span>
+</span></span></code></pre></div><ul>
 <li><code>init.el</code>: Entry script of the pack. Mostly something like:</li>
 </ul>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-clojure" data-lang="clojure"><span style="color:#75715e">;; Load bindings config</span>
-(<span style="color:#a6e22e">live-load-config-file</span> <span style="color:#e6db74">&#34;bindings.el&#34;</span>)
-
-<span style="color:#75715e">;; Custom settings</span>
-(<span style="color:#a6e22e">live-load-config-file</span> <span style="color:#e6db74">&#34;yourname-conf.el&#34;</span>)
-</code></pre></div><ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-clojure" data-lang="clojure"><span style="display:flex;"><span><span style="color:#75715e">;; Load bindings config</span>
+</span></span><span style="display:flex;"><span>(<span style="color:#a6e22e">live-load-config-file</span> <span style="color:#e6db74">&#34;bindings.el&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">;; Custom settings</span>
+</span></span><span style="display:flex;"><span>(<span style="color:#a6e22e">live-load-config-file</span> <span style="color:#e6db74">&#34;yourname-conf.el&#34;</span>)
+</span></span></code></pre></div><ul>
 <li><code>info.el</code>: Meta data of the user pack.</li>
 <li><code>README.md</code>: Helpful info for user pack customization.</li>
 </ul>
 <h3 id="import-3rd-party-pack">Import 3rd Party Pack</h3>
 <p>The built-in <code>cyberpunk</code> color theme bundled with <em>Emacs Live</em> is amazing, but I love the epic Solarized color theme all the time. Fortunately an <em>Emacs Live</em> user has made a <a href="https://github.com/siancu/solarized-pack">reusable pack</a> for it<sup id="fnref:5"><a href="#fn:5" class="footnote-ref" role="doc-noteref">5</a></sup>. Simply import it from GitHub:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">cd ~/.live-packs
-git clone git://github.com/siancu/solarized-pack.git
-cd solarized-pack
-git submodule init
-git submodule update
-</code></pre></div><h3 id="tell-emacs-to-load-user-packs">Tell Emacs to Load User Packs</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cd ~/.live-packs
+</span></span><span style="display:flex;"><span>git clone git://github.com/siancu/solarized-pack.git
+</span></span><span style="display:flex;"><span>cd solarized-pack
+</span></span><span style="display:flex;"><span>git submodule init
+</span></span><span style="display:flex;"><span>git submodule update
+</span></span></code></pre></div><h3 id="tell-emacs-to-load-user-packs">Tell Emacs to Load User Packs</h3>
 <p><em>Emacs Live</em> uses <code>~/.emacs-live.el</code> to load user packs. So we need to create a <code>~/.emacs-live.el</code> file and put these lines in it:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-clojure" data-lang="clojure">(<span style="color:#a6e22e">live-use-packs</span> <span style="color:#f92672">&#39;</span>(<span style="color:#a6e22e">live/foundation-pack</span>     <span style="color:#75715e">; Use live-use-packs to control which built-in packs should be loaded</span>
-                  <span style="color:#75715e">; live/colour-pack       ; This built-in pack MUST be disabled if you want to use 3rd party color theme pack</span>
-                  live/clojure-pack
-                  live/lang-pack
-                  live/power-pack))
-(<span style="color:#a6e22e">live-add-packs</span> <span style="color:#f92672">&#39;</span>(<span style="color:#f92672">~</span>/.live-packs/neo-pack   <span style="color:#75715e">; Use live-add-packs to load custom packs</span>
-                  <span style="color:#f92672">~</span>/.live-packs/solarized-pack))
-</code></pre></div><h2 id="final-tweaks">Final Tweaks</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-clojure" data-lang="clojure"><span style="display:flex;"><span>(<span style="color:#a6e22e">live-use-packs</span> <span style="color:#f92672">&#39;</span>(<span style="color:#a6e22e">live/foundation-pack</span>     <span style="color:#75715e">; Use live-use-packs to control which built-in packs should be loaded</span>
+</span></span><span style="display:flex;"><span>                  <span style="color:#75715e">; live/colour-pack       ; This built-in pack MUST be disabled if you want to use 3rd party color theme pack</span>
+</span></span><span style="display:flex;"><span>                  live/clojure-pack
+</span></span><span style="display:flex;"><span>                  live/lang-pack
+</span></span><span style="display:flex;"><span>                  live/power-pack))
+</span></span><span style="display:flex;"><span>(<span style="color:#a6e22e">live-add-packs</span> <span style="color:#f92672">&#39;</span>(<span style="color:#f92672">~</span>/.live-packs/neo-pack   <span style="color:#75715e">; Use live-add-packs to load custom packs</span>
+</span></span><span style="display:flex;"><span>                  <span style="color:#f92672">~</span>/.live-packs/solarized-pack))
+</span></span></code></pre></div><h2 id="final-tweaks">Final Tweaks</h2>
 <h3 id="emacs-launching-time">Emacs Launching Time</h3>
 <p><em>Emacs Live</em> is extremely powerful and thus cause rather long Emacs starting time as trade-off. Fortunately Emacs has standard solution for this problem: the Emacs daemon and <code>emacsclient</code>. Just add these aliases in your shell startup script (e.g. my <code>~/.zshrc</code>):</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">alias es<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;/Applications/Emacs.app/Contents/MacOS/Emacs --daemon&#39;</span>
-alias emacs<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -c -n&#39;</span>
-</code></pre></div><p>Then you can firstly launch the Emacs server daemon by issuing <code>es</code> in shell (only once), after which you can instantly open Emacs editor by <code>emacs &lt;filename&gt;</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>alias es<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;/Applications/Emacs.app/Contents/MacOS/Emacs --daemon&#39;</span>
+</span></span><span style="display:flex;"><span>alias emacs<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -c -n&#39;</span>
+</span></span></code></pre></div><p>Then you can firstly launch the Emacs server daemon by issuing <code>es</code> in shell (only once), after which you can instantly open Emacs editor by <code>emacs &lt;filename&gt;</code>.</p>
 <h3 id="connecting-to-nrepl">Connecting to nREPL</h3>
 <p><em>Emacs Live</em> provides <em>nREPL</em> integration through <code>nrepl.el</code>. To use that you can choose one of two ways.</p>
 <h4 id="jacking-in">Jacking In</h4>
@@ -236,62 +245,66 @@ alias emacs<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;
 <p>In order to communicate with the correct project, you should summon <code>M-x nrepl-jack-in</code> whilst the active buffer displaying file which is part of the <em>Leiningen</em> project you wish to connect to. This will then spawn <code>lein repl :headless</code> as an external shell process and automatically connect to it.</p>
 <h4 id="manually-connection">Manually Connection</h4>
 <p>Another option for connecting to an <em>nREPL</em> process is to manually start a <em>Leiningen</em> REPL by <code>cd</code>ing to the project folder and issuing the command <code>lein repl</code>. This will start a REPL on the terminal, but also tell you which port <em>nREPL</em> is listening on i.e.:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">nREPL server started on port <span style="color:#ae81ff">62132</span>
-</code></pre></div><p>Then use <code>M-x nrepl</code> command in Emacs and feed it with <code>127.0.0.1</code> (default) host and <em>right</em> port, which should have been printed in the shell output of <code>lein repl</code> command. In the case shown above the <em>right</em> port is 62132. Soon you will get annoyed by looking for this random port number and paste it to Emacs <code>M-x nrepl</code> prompt. Fortunately we can ask the nREPL server to listen to the default 4555 port by adding a custom <code>lein</code> command in <code>~/.lein/profiles.clj</code>:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-clojure" data-lang="clojure">{<span style="color:#e6db74">:live-repl</span> {<span style="color:#e6db74">:repl-options</span> {<span style="color:#e6db74">:port</span> <span style="color:#ae81ff">4555</span>}}
- <span style="color:#e6db74">:user</span> {<span style="color:#e6db74">:aliases</span> {<span style="color:#e6db74">&#34;live&#34;</span> [<span style="color:#e6db74">&#34;with-profile&#34;</span> <span style="color:#e6db74">&#34;default,live-repl&#34;</span> <span style="color:#e6db74">&#34;repl&#34;</span>]}
-        <span style="color:#e6db74">:dependencies</span> [...]}
- }
-</code></pre></div><p>Now you can issue <code>lein live</code> command under the project folder, which will start a normal <em>nREPL</em> session, but this time it will always be listening on port 4555. Connecting from Emacs is now just a matter of <code>M-x nrepl RET RET</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>nREPL server started on port <span style="color:#ae81ff">62132</span>
+</span></span></code></pre></div><p>Then use <code>M-x nrepl</code> command in Emacs and feed it with <code>127.0.0.1</code> (default) host and <em>right</em> port, which should have been printed in the shell output of <code>lein repl</code> command. In the case shown above the <em>right</em> port is 62132. Soon you will get annoyed by looking for this random port number and paste it to Emacs <code>M-x nrepl</code> prompt. Fortunately we can ask the nREPL server to listen to the default 4555 port by adding a custom <code>lein</code> command in <code>~/.lein/profiles.clj</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-clojure" data-lang="clojure"><span style="display:flex;"><span>{<span style="color:#e6db74">:live-repl</span> {<span style="color:#e6db74">:repl-options</span> {<span style="color:#e6db74">:port</span> <span style="color:#ae81ff">4555</span>}}
+</span></span><span style="display:flex;"><span> <span style="color:#e6db74">:user</span> {<span style="color:#e6db74">:aliases</span> {<span style="color:#e6db74">&#34;live&#34;</span> [<span style="color:#e6db74">&#34;with-profile&#34;</span> <span style="color:#e6db74">&#34;default,live-repl&#34;</span> <span style="color:#e6db74">&#34;repl&#34;</span>]}
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">:dependencies</span> [...]}
+</span></span><span style="display:flex;"><span> }
+</span></span></code></pre></div><p>Now you can issue <code>lein live</code> command under the project folder, which will start a normal <em>nREPL</em> session, but this time it will always be listening on port 4555. Connecting from Emacs is now just a matter of <code>M-x nrepl RET RET</code>.</p>
 <h2 id="faq">FAQ</h2>
 <p><em>Emacs Live</em> is being very actively developed and with relatively little <a href="http://overtone.github.com/emacs-live/documentation.html">documentation</a>. Here are some tricks I used in my pack, which may be updated from time to time.</p>
 <p><strong>Q: Why is my custom color theme overrided by Emacs Live built-in theme?</strong><br>
 A: You have to disable the built-in <code>live/colour-pack</code> to use custom color theme, as shown in the <em>Tell Emacs to Load User Packs</em> section above.</p>
 <p><strong>Q: How to use my favorite font instead of the default one?</strong><br>
 A: Modify <code>default-frame-alist</code> in <code>conf/yourname-conf.el</code> under your user pack (<code>~/.live-packs/yourname-pack</code>):</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-clojure" data-lang="clojure">(<span style="color:#a6e22e">add-to-list</span> <span style="color:#e6db74">&#39;default-frame-alist</span> <span style="color:#f92672">&#39;</span>(<span style="color:#a6e22e">font</span> <span style="color:#66d9ef">. </span><span style="color:#e6db74">&#34;PragmataPro 14&#34;</span>))
-</code></pre></div><p><strong>Q: How to customize my cursor color?</strong><br>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-clojure" data-lang="clojure"><span style="display:flex;"><span>(<span style="color:#a6e22e">add-to-list</span> <span style="color:#e6db74">&#39;default-frame-alist</span> <span style="color:#f92672">&#39;</span>(<span style="color:#a6e22e">font</span> <span style="color:#66d9ef">. </span><span style="color:#e6db74">&#34;PragmataPro 14&#34;</span>))
+</span></span></code></pre></div><p><strong>Q: How to customize my cursor color?</strong><br>
 A: Modify <code>default-frame-alist</code> in <code>conf/yourname-conf.el</code> under your user pack:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-clojure" data-lang="clojure">(<span style="color:#a6e22e">add-to-list</span> <span style="color:#e6db74">&#39;default-frame-alist</span> <span style="color:#f92672">&#39;</span>(<span style="color:#a6e22e">cursor-color</span> <span style="color:#66d9ef">. </span><span style="color:#e6db74">&#34;palegoldenrod&#34;</span>))
-</code></pre></div><p><strong>Q: I want the highlight current line feature back!</strong><br>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-clojure" data-lang="clojure"><span style="display:flex;"><span>(<span style="color:#a6e22e">add-to-list</span> <span style="color:#e6db74">&#39;default-frame-alist</span> <span style="color:#f92672">&#39;</span>(<span style="color:#a6e22e">cursor-color</span> <span style="color:#66d9ef">. </span><span style="color:#e6db74">&#34;palegoldenrod&#34;</span>))
+</span></span></code></pre></div><p><strong>Q: I want the highlight current line feature back!</strong><br>
 A: After disabling the built-in <code>live/colour-pack</code> (see the first question above) you will lose the <em>highlight current line</em> feature as a side effect (since it&rsquo;s defined in that pack). But it&rsquo;s very easy to add it back, by adding the following line to <code>conf/yourname-conf.el</code> under your user pack:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-clojure" data-lang="clojure">(<span style="color:#a6e22e">global-hl-line-mode</span> <span style="color:#ae81ff">1</span>)
-</code></pre></div><section class="footnotes" role="doc-endnotes">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-clojure" data-lang="clojure"><span style="display:flex;"><span>(<span style="color:#a6e22e">global-hl-line-mode</span> <span style="color:#ae81ff">1</span>)
+</span></span></code></pre></div><div class="footnotes" role="doc-endnotes">
 <hr>
 <ol>
-<li id="fn:1" role="doc-endnote">
-<p>See the <a href="http://dev.clojure.org/display/doc/Getting+Started">Getting Started</a> guide in the official dev wiki for more. But note that many info in it are deprecated (e.g. Netbeans and Enclojure, Swank Clojure for Emacs, VimClojure, etc.). <a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<li id="fn:1">
+<p>See the <a href="http://dev.clojure.org/display/doc/Getting+Started">Getting Started</a> guide in the official dev wiki for more. But note that many info in it are deprecated (e.g. Netbeans and Enclojure, Swank Clojure for Emacs, VimClojure, etc.).&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
-<li id="fn:2" role="doc-endnote">
-<p>Overtone is extremely amazing and I highly suggest to have a try. Or you can see the <a href="http://vimeo.com/22798433">video</a> (Emacs Live in action!) to get some idea. <a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<li id="fn:2">
+<p>Overtone is extremely amazing and I highly suggest to have a try. Or you can see the <a href="http://vimeo.com/22798433">video</a> (Emacs Live in action!) to get some idea.&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
-<li id="fn:3" role="doc-endnote">
-<p>IMHO, <a href="http://emacswiki.org/emacs/ParEdit">Paredit</a> is one of the key reasons which makes Emacs the best editor for all LISP dialects. See this <a href="http://www.slideshare.net/mudphone/paredit-preso">perfect guide</a> if not familiar with paredit.el. <a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<li id="fn:3">
+<p>IMHO, <a href="http://emacswiki.org/emacs/ParEdit">Paredit</a> is one of the key reasons which makes Emacs the best editor for all LISP dialects. See this <a href="http://www.slideshare.net/mudphone/paredit-preso">perfect guide</a> if not familiar with paredit.el.&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
-<li id="fn:4" role="doc-endnote">
-<p>If choosing the official method while running <code>lein -v</code> the first time it will download all dependencies for Leiningen, and then print out the version info. <a href="#fnref:4" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<li id="fn:4">
+<p>If choosing the official method while running <code>lein -v</code> the first time it will download all dependencies for Leiningen, and then print out the version info.&#160;<a href="#fnref:4" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
-<li id="fn:5" role="doc-endnote">
-<p>Studying this simple user pack example can make building your own pack, especially color-theme pack as easily as Copy and Paste. <a href="#fnref:5" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<li id="fn:5">
+<p>Studying this simple user pack example can make building your own pack, especially color-theme pack as easily as Copy and Paste.&#160;<a href="#fnref:5" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 </ol>
-</section>
+</div>
 
 </article>
 
 
 <section class="post-nav">
     <ul>
-        
         <li>
+        
             <a href="/posts/ios-7/"><i class="fa fa-chevron-circle-left"></i> iOS 7</a>
+        
         </li>
+        <li>
         
-        
+        </li>
     </ul>
 </section>
+  
     
     
+  
 
 
 
@@ -299,12 +312,19 @@ A: After disabling the built-in <code>live/colour-pack</code> (see the first que
 
 </main>
     <footer>
-        <h6>Copyright © 2020 - Neo Lee |
-            Rendered by <a href="https://gohugo.io" title="Hugo">Hugo</a> |
-            <a href="/index.xml">Subscribe </a></h6>
+        <ul>
+            <li>
+                <h6>Copyright © 2022 - Neo Lee | 
+                    Rendered by <a href="https://gohugo.io" title="Hugo">Hugo</a> |
+                    <a href="/index.xml">Subscribe </a></h6>
+            </li>
+            
+            
+        </ul>
     </footer>
 </div>
 <script src="/js/scripts.js"></script>
+
 
 </body>
 
