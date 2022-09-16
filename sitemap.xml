@@ -5,6 +5,11 @@
     <loc>/posts/</loc>
     <lastmod>2013-04-01T23:45:00+08:00</lastmod>
   </url><url>
+    <loc>/tags/</loc>
+    <lastmod>2013-04-01T23:45:00+08:00</lastmod>
+  </url><url>
+    <loc>/about/</loc>
+  </url><url>
     <loc>/posts/clojure-toolchain-reloaded/</loc>
     <lastmod>2013-04-01T23:45:00+08:00</lastmod>
   </url><url>
@@ -12,9 +17,6 @@
     <lastmod>2013-04-01T23:45:00+08:00</lastmod>
   </url><url>
     <loc>/tags/programming/</loc>
-    <lastmod>2013-04-01T23:45:00+08:00</lastmod>
-  </url><url>
-    <loc>/tags/</loc>
     <lastmod>2013-04-01T23:45:00+08:00</lastmod>
   </url><url>
     <loc>/tags/apple/</loc>
@@ -64,8 +66,6 @@
   </url><url>
     <loc>/tags/gadget/</loc>
     <lastmod>2011-12-03T16:59:00+08:00</lastmod>
-  </url><url>
-    <loc>/about/</loc>
   </url><url>
     <loc>/categories/</loc>
   </url>
